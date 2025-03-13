@@ -4,7 +4,6 @@ import AboutUsView from "../views/AboutUsView/AboutUsView.vue";
 import ContactView from "../views/ContactView/Contact.vue";
 import OfferView from "@/views/OfferView/OfferView.vue";
 import LottoGameView from "@/views/LottoGameView/LottoGameView.vue";
-import OneArmBanditView from "@/views/OneArmBanditView/OneArmBanditView.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -31,11 +30,6 @@ const routes: Array<RouteRecordRaw> = [
     path: "/lotto",
     name: "Lotto Simulation",
     component: LottoGameView,
-  },
-  {
-    path: "/oneArmBandit",
-    name: "One Arm Bandit",
-    component: OneArmBanditView,
   },
 ];
 
