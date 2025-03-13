@@ -1,11 +1,10 @@
-import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
+import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import HomeView from "../views/HomeView/HomeView.vue";
 import AboutUsView from "../views/AboutUsView/AboutUsView.vue";
 import ContactView from "../views/ContactView/Contact.vue";
 import OfferView from "@/views/OfferView/OfferView.vue";
 import LottoGameView from "@/views/LottoGameView/LottoGameView.vue";
-import OneArmBanditView from "@/views/OneArmBanditView/OneArmBanditView.vue";
-
+import SlotsView from "@/views/SlotsView/SlotsView.vue";
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
@@ -33,14 +32,14 @@ const routes: Array<RouteRecordRaw> = [
     component: LottoGameView,
   },
   {
-    path: "/oneArmBandit",
-    name: "One Arm Bandit",
-    component: OneArmBanditView,
+    path: "/slots",
+    name: "Slots",
+    component: SlotsView,
   },
 ];
 
 const router = createRouter({
-  history: createWebHashHistory(process.env.BASE_URL),
+  history: createWebHistory(process.env.BASE_URL),
   routes,
 });
 
