@@ -1,6 +1,9 @@
 <template>
   <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-    <a :href="props.href" class="card-body d-flex flex-column align-items-center">
+    <RouterLink
+      :to="props.href"
+      class="card-body d-flex flex-column align-items-center"
+    >
       <img
         :src="require(`../../../assets/Photos/${props.imgSrc}`)"
         alt="Work"
@@ -42,11 +45,13 @@
           </a>
         </div>
       </div>
-    </a>
+    </RouterLink>
   </div>
 </template>
 
 <script setup lang="ts">
+import { RouterLink } from "vue-router";
+
 const props = defineProps<{
   title: string;
   imgSrc: string;
@@ -62,7 +67,7 @@ const props = defineProps<{
   img {
     width: 100%;
     height: 100%;
-    margin-bottom: .8rem;
+    margin-bottom: 0.8rem;
   }
 
   h3 {
@@ -102,15 +107,15 @@ const props = defineProps<{
   }
 }
 .card-body:hover {
-    cursor: pointer;
-    .arrow-icon {
-      transform: translate3d(5px, 0, 0);
-    }
-
-    .arrow-icon--circle {
-      stroke-dashoffset: 0;
-    }
+  cursor: pointer;
+  .arrow-icon {
+    transform: translate3d(5px, 0, 0);
   }
+
+  .arrow-icon--circle {
+    stroke-dashoffset: 0;
+  }
+}
 
 .card {
   background-color: transparent;

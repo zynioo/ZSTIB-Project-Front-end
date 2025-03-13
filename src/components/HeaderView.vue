@@ -4,7 +4,7 @@
     aria-label="Fourth navbar example"
   >
     <div class="container-fluid">
-      <a href="/#main" class="navbar-brand">ZSTIB<span>.</span> </a>
+      <a href="/" class="navbar-brand">ZSTIB<span>.</span> </a>
       <button class="navbar-toggler" type="button" @click="toggleNavbar">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -15,13 +15,13 @@
       >
         <ul class="navbar-nav ms-auto mb-md-0">
           <li class="nav-item">
-            <a href="/main" class="nav-link" @click.native="closeNavbar"
-              >Strona Główna</a
+            <RouterLink to="/main" class="nav-link" @click.native="closeNavbar"
+              >Strona Główna</RouterLink
             >
           </li>
           <li class="nav-item">
-            <a href="/services" class="nav-link" @click="closeNavbar"
-              >Co oferujemy</a
+            <RouterLink to="/" class="nav-link" @click="closeNavbar"
+              >Co oferujemy</RouterLink
             >
           </li>
           <li class="nav-item">
