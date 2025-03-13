@@ -15,7 +15,7 @@
       >
         <ul class="navbar-nav ms-auto mb-md-0">
           <li class="nav-item">
-            <RouterLink to="/main" class="nav-link" @click.native="closeNavbar"
+            <RouterLink to="/" class="nav-link" @click.native="closeNavbar"
               >Strona Główna</RouterLink
             >
           </li>
