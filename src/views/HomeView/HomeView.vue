@@ -172,7 +172,7 @@ const works: Work[] = [
   },
   {
     title: "Jednoręki Bandyta",
-    imgSrc: "TP.png",
+    imgSrc: "SlotsPreview.png",
     href: "/slots",
   },
   {

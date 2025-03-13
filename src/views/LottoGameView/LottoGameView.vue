@@ -2,25 +2,17 @@
   <section class="lotto">
     <div class="container col-xxl-10">
       <div class="row d-flex">
-        <!-- Formularz -->
-        <div class="col-lg-6 p-0 form-container">
-          <div class="services-header">
-            <h2>Lotto Simulator</h2>
-          </div>
-          <div class="services-header">
-            <div class="services-header-content">
-              <hr class="line" />
-              <span></span>
-            </div>
-            <div class="services-description">
-              <p>
-                To jeden z naszych projektów, tworzonych na lekcjach. Symuluje
-                on popularną grę Lotto. Wprowadź swoje liczby i sprawdź czy
-                wygrasz!
-              </p>
-            </div>
-          </div>
-        </div>
+        <HeaderOfGame>
+          <template #header>
+            <h2>Symlator Lotto</h2>
+          </template>
+          <template #description>
+            <p>
+              To jeden z naszych projektów, tworzonych na lekcjach. Symuluje on
+              popularną grę Lotto. Wprowadź swoje liczby i sprawdź czy wygrasz!
+            </p>
+          </template>
+        </HeaderOfGame>
         <div class="prize-pool">
           Aktualna pula nagród: <span>{{ prizePool }}</span>
         </div>
@@ -37,9 +29,8 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, defineProps, defineEmits } from "vue";
-import { inject } from "vue";
-
+import { ref } from "vue";
+import HeaderOfGame from "@/components/HeaderOfGame.vue";
 import LottoGamePanel from "./LottoGamePanel.vue";
 
 const prizePool = ref<number>(0);
