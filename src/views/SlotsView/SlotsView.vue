@@ -8,6 +8,12 @@
         <template #description>
           Przed tobą klasyczny jednoręki bandyta. Zagraj i sprawdź swoje
           szczęście!
+          <br />
+          Traf trzy takie same liczby i wygraj 3x stawkę
+          <br />
+          Traf trzy różne liczby i wygraj stawkę
+          <br />
+          Przegrasz jeśli nie trafisz żadnej z tych opcji
         </template>
       </HeaderOfGame>
       <div class="row justify-content-center">
@@ -100,8 +106,15 @@ const checkResults = () => {
     drawedNumbersArray.value[0] === drawedNumbersArray.value[1] &&
     drawedNumbersArray.value[1] === drawedNumbersArray.value[2]
   ) {
-    wallet.value += stake.value;
+    wallet.value += stake.value * 3;
     isWin.value = true;
+  } else if (
+    drawedNumbersArray.value[0] !== drawedNumbersArray.value[1] &&
+    drawedNumbersArray.value[1] !== drawedNumbersArray.value[2] &&
+    drawedNumbersArray.value[0] !== drawedNumbersArray.value[2]
+  ) {
+    isWin.value = true;
+    wallet.value += stake.value;
   } else {
     wallet.value -= stake.value;
   }
@@ -109,7 +122,7 @@ const checkResults = () => {
 </script>
 <style scoped>
 .Slots-container {
-  margin-top: 4rem;
+  margin-top: 5rem;
 }
 .prize-pool {
   font-size: 1.5rem;
