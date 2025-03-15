@@ -5,7 +5,7 @@
       class="card-body d-flex flex-column align-items-center"
     >
       <img
-        :src="require(`../../../assets/Photos/${props.imgSrc}`)"
+        :src="require(`../../../assets/Photos/gamePreviews/${props.imgSrc}`)"
         alt="Work"
         class="project-img"
       />

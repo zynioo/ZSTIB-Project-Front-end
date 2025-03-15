@@ -166,9 +166,9 @@ const services: Service[] = [
 
 const works: Work[] = [
   {
-    title: "Lotto Simulator",
-    imgSrc: "LottoPreview.png",
-    href: "/lotto",
+    title: "Ruletka",
+    imgSrc: "RoulettePreview.png",
+    href: "/roulette",
   },
   {
     title: "Jednoręki Bandyta",
@@ -176,9 +176,9 @@ const works: Work[] = [
     href: "/slots",
   },
   {
-    title: "Lorem Ipsum",
-    imgSrc: "TP.png",
-    href: "",
+    title: "Lotto Simulator",
+    imgSrc: "LottoPreview.png",
+    href: "/lotto",
   },
   {
     title: "Lorem Ipsum",
