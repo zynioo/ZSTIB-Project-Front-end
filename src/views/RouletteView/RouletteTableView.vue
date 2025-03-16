@@ -41,25 +41,25 @@
             class="bigCell option"
             colspan="4"
             @click="chosen"
-            v-on:click="chooseOption('1 - 12')"
+            v-on:click="chooseOption('1 do 12')"
           >
-            <div class="inCellTextBorder">1 - 12</div>
+            <div class="inCellTextBorder">1 do 12</div>
           </td>
           <td
             class="bigCell option"
             colspan="4"
             @click="chosen"
-            v-on:click="chooseOption('13 - 24')"
+            v-on:click="chooseOption('13 do 24')"
           >
-            <div class="inCellTextBorder">13 - 24</div>
+            <div class="inCellTextBorder">13 do 24</div>
           </td>
           <td
             class="bigCell option"
             colspan="4"
             @click="chosen"
-            v-on:click="chooseOption('25 - 36')"
+            v-on:click="chooseOption('25 do 36')"
           >
-            <div class="inCellTextBorder">25 - 36</div>
+            <div class="inCellTextBorder">25 do 36</div>
           </td>
         </tr>
         <tr>
@@ -68,9 +68,9 @@
             class="bigCell option"
             colspan="2"
             @click="chosen"
-            v-on:click="chooseOption('1 - 18')"
+            v-on:click="chooseOption('1 do 18')"
           >
-            <div class="inCellTextBorder">1 - 18</div>
+            <div class="inCellTextBorder">1 do 18</div>
           </td>
           <td
             class="bigCell option"
@@ -107,10 +107,10 @@
           <td
             class="bigCell option"
             colspan="2"
-            v-on:click="chooseOption('19 - 36')"
+            v-on:click="chooseOption('19 do 36')"
             @click="chosen"
           >
-            <div class="inCellTextBorder">19 - 36</div>
+            <div class="inCellTextBorder">19 do 36</div>
           </td>
         </tr>
       </tbody>
