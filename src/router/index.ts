@@ -5,6 +5,7 @@ import ContactView from "../views/ContactView/Contact.vue";
 import OfferView from "@/views/OfferView/OfferView.vue";
 import LottoGameView from "@/views/LottoGameView/LottoGameView.vue";
 import SlotsView from "@/views/SlotsView/SlotsView.vue";
+import RouletteView from "@/views/RouletteView/RouletteView.vue";
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
@@ -35,6 +36,11 @@ const routes: Array<RouteRecordRaw> = [
     path: "/slots",
     name: "Slots",
     component: SlotsView,
+  },
+  {
+    path: "/roulette",
+    name: "Roulette",
+    component: RouletteView,
   },
 ];
 
