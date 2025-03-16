@@ -2,6 +2,7 @@
   <div class="lotto-result">
     <h2>Wylosowane numery:</h2>
     <div class="result-nums-container">
+      <div v-if="winningNumbers.length === 0" class="loading">Losowanie...</div>
       <div
         v-for="number in winningNumbers"
         :key="number"
@@ -65,16 +66,19 @@ const emitReturnToTable = () => {
 
 const fetchResults = async () => {
   try {
-    const response = await fetch("https://zstib-project.vercel.app/api/lotto/generateLottoNumbers", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        selectedNumbers: props.selectedNumbers,
-        prizePool: props.prizePool,
-      }),
-    });
+    const response = await fetch(
+      "https://zstib-project.vercel.app/api/lotto/generateLottoNumbers",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          selectedNumbers: props.selectedNumbers,
+          prizePool: props.prizePool,
+        }),
+      }
+    );
 
     if (!response.ok) {
       throw new Error("Nie udało się pobrać wyników");
@@ -167,6 +171,12 @@ onMounted(() => {
   border: 1px solid var(--primary);
   transition: 0.3s ease-in-out;
   padding: 0.7rem 1.4rem;
+}
+
+.loading {
+  color: white;
+  font-size: 1.75rem;
+  text-align: center;
 }
 
 .btn:hover {
