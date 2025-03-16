@@ -65,7 +65,7 @@ const emitReturnToTable = () => {
 
 const fetchResults = async () => {
   try {
-    const response = await fetch("/api/lotto/generateLottoNumbers", {
+    const response = await fetch("https://zstib-project.vercel.app/api/lotto/generateLottoNumbers", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

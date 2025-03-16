@@ -37,7 +37,7 @@ const prizePool = ref<number>(0);
 
 const fetchPrizePool = async () => {
   try {
-    const response = await fetch("/api/lotto/prize-pool");
+    const response = await fetch("https://zstib-project.vercel.app/api/lotto/prize-pool");
     const data = await response.json();
     prizePool.value = parseInt(data.prizePool);
   } catch (error) {
@@ -47,7 +47,7 @@ const fetchPrizePool = async () => {
 
 const incrementPrizePool = async () => {
   try {
-    await fetch("/api/lotto/increment-prize-pool", {
+    await fetch("https://zstib-project.vercel.app/api/lotto/increment-prize-pool", {
       method: "POST",
     });
     fetchPrizePool();
@@ -58,7 +58,7 @@ const incrementPrizePool = async () => {
 
 const resetPrizePool = async () => {
   try {
-    await fetch("/api/lotto/reset-prize-pool", {
+    await fetch("https://zstib-project.vercel.app/api/lotto/reset-prize-pool", {
       method: "POST",
     });
     fetchPrizePool();
