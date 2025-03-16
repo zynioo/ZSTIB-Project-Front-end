@@ -119,33 +119,58 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, defineProps, onMounted } from "vue";
+import { ref, computed, onMounted } from "vue";
 
+// References to all options on the table
 const options = ref<NodeListOf<HTMLElement> | null>(null);
 
+// Get all options on the table
 onMounted(() => {
   options.value = document.querySelectorAll(".option");
 });
 
-const chosen = (event: Event) => {
-  let target = event.target as HTMLElement;
-  if (target.tagName.toLowerCase() === "div") {
-    target = target.parentElement as HTMLElement;
-  }
-  if (options.value) {
-    options.value.forEach((option) => {
-      option.classList.remove("chosen");
-    });
-  }
-  target.classList.add("chosen");
-};
-
+// Props
 const props = defineProps<{
   chooseOption: (option: string) => void;
   numbers: { number: number; color: string }[];
 }>();
 
+/**
+ * Add chosen class to the clicked option and remove it from the others
+ * @param event - click event
+ */
+const chosen = (event: Event) => {
+  // Get the clicked element
+  let target = event.target as HTMLElement;
+
+  // If the clicked element is a div, get its parent
+  if (target.tagName.toLowerCase() === "div") {
+    target = target.parentElement as HTMLElement;
+  }
+  // Remove the chosen class from all options
+  if (options.value) {
+    options.value.forEach((option) => {
+      option.classList.remove("chosen");
+    });
+  }
+  // Add the chosen class to the clicked option
+  target.classList.add("chosen");
+};
+
+/**
+ * Choose an option and perform an action
+ * @param option - the chosen option
+ */
+const chooseOption = (option: string) => {
+  props.chooseOption(option);
+};
+
+/**
+ * Distribute numbers among the three rows of the table
+ * @returns - formatted table
+ */
 const formattedTable = computed(() => {
+  // Create three empty rows
   let rows: any[] = [[], [], []];
 
   // Distribute numbers among the three rows

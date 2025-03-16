@@ -15,7 +15,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
-import { defineProps, computed, onUpdated } from "vue";
+import { computed, onUpdated } from "vue";
 const numbers = [0, 1, 2];
 const props = defineProps<{
   drawedNumbers: number[];
