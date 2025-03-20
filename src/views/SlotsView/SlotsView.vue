@@ -18,12 +18,13 @@
       </HeaderOfGame>
       <div class="row justify-content-center">
         <SlotsPanel
-          :drawedNumbers="drawedNumbersArray"
+          :drawedNumbers="drawedNumbersAray"
           :spinEnded="!isSpinning"
           :isWin="isWin"
         ></SlotsPanel>
       </div>
       <div class="row">
+        <div class="joker-drawed" v-if="jokerDrawed">Wylosowałeś JOKERA</div>
         <div class="prize-pool">
           Stan twojego portfela: <span>{{ wallet }}</span>
         </div>
@@ -44,39 +45,50 @@
 import HeaderOfGame from "@/components/HeaderOfGame.vue";
 import SlotsPanel from "./SlotsPanel.vue";
 import { ref } from "vue";
-import { check } from "prettier";
-const drawedNumbersArray = ref<number[]>([0, 0, 0]);
+import confetti from "canvas-confetti";
+
+const drawedNumbersAray = ref<number[][]>([
+  [2, 2, 2],
+  [2, 2, 2],
+  [2, 2, 2],
+]);
+
 const isSpinning = ref(false);
 const wallet = ref(1000);
 const stake = ref(0); // Stake for each game
 const isWin = ref(false);
+const jokerDrawed = ref(false);
 /**
  *This function randomizes numbers in the Slots game
  * @param delay - delay between each number change
  */
 const randomizeNumbers = (delay = 10) => {
   if (delay > 500) {
-    // Stop animation and set final numbers
-    drawedNumbersArray.value = [
-      Math.floor(Math.random() * 5) + 1,
-      Math.floor(Math.random() * 5) + 1,
-      Math.floor(Math.random() * 5) + 1,
-    ];
+    // set final numbers
+    drawedNumbersAray.value = Array.from({ length: 3 }, () =>
+      Array.from({ length: 3 }, () => Math.floor(Math.random() * 5) + 1)
+    );
     isSpinning.value = false;
     checkResults();
     return;
   }
-  // Randomize numbers for animation
-  drawedNumbersArray.value = [
-    Math.floor(Math.random() * 5) + 1,
-    Math.floor(Math.random() * 5) + 1,
-    Math.floor(Math.random() * 5) + 1,
-  ];
+
+  // move the last row to the top
+  const newNumbers = Array.from({ length: 3 }, (_, rowIndex) => {
+    if (rowIndex > 0) {
+      return [...drawedNumbersAray.value[rowIndex - 1]];
+    } else {
+      // for the first row, generate new random numbers
+      return Array.from({ length: 3 }, () => Math.floor(Math.random() * 5) + 1);
+    }
+  });
+
+  drawedNumbersAray.value = newNumbers;
 
   const nextDelay = delay + 35;
-
   setTimeout(() => randomizeNumbers(nextDelay), nextDelay);
 };
+
 /**
  * This function checks if user can play the game
  */
@@ -95,29 +107,71 @@ const changeNumbers = () => {
   if (isSpinning.value) return;
   isSpinning.value = true;
   isWin.value = false;
-
+  jokerDrawed.value = false;
   randomizeNumbers(); // Start animation
 };
 /**
  * This function checks the results of the game
  */
 const checkResults = () => {
+  //check super win
   if (
-    drawedNumbersArray.value[0] === drawedNumbersArray.value[1] &&
-    drawedNumbersArray.value[1] === drawedNumbersArray.value[2]
+    drawedNumbersAray.value[0][0] == drawedNumbersAray.value[0][1] &&
+    drawedNumbersAray.value[0][1] == drawedNumbersAray.value[0][2] &&
+    drawedNumbersAray.value[1][0] == 2
+  ) {
+    wallet.value += stake.value * 5;
+    isWin.value = true;
+    jokerDrawed.value = true;
+    launchConfetti();
+  }
+  if (
+    drawedNumbersAray.value[1][0] == drawedNumbersAray.value[1][1] &&
+    drawedNumbersAray.value[1][1] == drawedNumbersAray.value[1][2]
   ) {
     wallet.value += stake.value * 3;
     isWin.value = true;
   } else if (
-    drawedNumbersArray.value[0] !== drawedNumbersArray.value[1] &&
-    drawedNumbersArray.value[1] !== drawedNumbersArray.value[2] &&
-    drawedNumbersArray.value[0] !== drawedNumbersArray.value[2]
+    drawedNumbersAray.value[1][0] != drawedNumbersAray.value[1][1] &&
+    drawedNumbersAray.value[1][1] != drawedNumbersAray.value[1][2]
   ) {
-    isWin.value = true;
     wallet.value += stake.value;
+    isWin.value = true;
   } else {
     wallet.value -= stake.value;
   }
+};
+const launchConfetti = () => {
+  const duration = 15 * 1000; // 15 sekund
+  const animationEnd = Date.now() + duration;
+  const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+  function randomInRange(min: number, max: number) {
+    return Math.random() * (max - min) + min;
+  }
+
+  const interval = setInterval(() => {
+    const timeLeft = animationEnd - Date.now();
+    if (timeLeft <= 0) {
+      clearInterval(interval);
+      return;
+    }
+
+    const particleCount = 50 * (timeLeft / duration);
+
+    // Wystrzał confetti z dwóch losowych punktów
+    confetti({
+      ...defaults,
+      particleCount,
+      origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
+    });
+
+    confetti({
+      ...defaults,
+      particleCount,
+      origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
+    });
+  }, 250);
 };
 </script>
 <style scoped>
@@ -151,6 +205,12 @@ const checkResults = () => {
   border: 1px solid var(--primary);
   border-radius: 5px;
   margin-right: 1rem;
+}
+.joker-drawed {
+  width: 100%;
+  font-size: 2rem;
+  color: var(--primary);
+  text-align: center;
 }
 /* Remove the arrows for input type number */
 input[type="number"]::-webkit-inner-spin-button,
