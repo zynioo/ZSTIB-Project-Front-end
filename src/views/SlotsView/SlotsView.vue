@@ -125,7 +125,7 @@ const checkResults = () => {
     jokerDrawed.value = true;
     launchConfetti();
   }
-  if (
+  else if (
     drawedNumbersAray.value[1][0] == drawedNumbersAray.value[1][1] &&
     drawedNumbersAray.value[1][1] == drawedNumbersAray.value[1][2]
   ) {
