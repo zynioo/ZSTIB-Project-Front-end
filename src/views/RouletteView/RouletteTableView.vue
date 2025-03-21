@@ -280,4 +280,80 @@ const formattedTable = computed(() => {
 .inCellTextBorder {
   user-select: none;
 }
+@media (max-width: 990px) {
+  .roulette-table-container {
+    overflow-x: auto;
+    padding: 1rem;
+  }
+  .roulette-table {
+    width: 100%;
+    font-size: 18px;
+  }
+  .cell,
+  .bigCell,
+  .twoToOneCell {
+    width: 45px;
+    height: 45px;
+    font-size: 16px;
+  }
+  .number {
+    width: 90%;
+    height: 65%;
+    font-size: 16px;
+  }
+  .inCellTextBorder {
+    width: 80px;
+    line-height: 28px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 767px) {
+  .roulette-table-container {
+    rotate: 90deg;
+    margin-top: 10rem;
+    margin-bottom: 10rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .roulette-table {
+    border-collapse: collapse;
+    font-size: 14px;
+    width: auto;
+    margin-top: 0;
+    margin-bottom: 0;
+    height: auto;
+    width: 95%;
+  }
+
+  .cell,
+  .bigCell,
+  .twoToOneCell {
+    width: 35px !important;
+    height: 35px !important;
+    font-size: 12px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 35px;
+  }
+
+  .number {
+    width: 90%;
+    height: 65%;
+    font-size: 12px;
+  }
+
+  .inCellTextBorder {
+    width: 60px;
+    line-height: 20px;
+    font-size: 10px;
+    padding: 2px;
+  }
+
+  .twoToOneCell div {
+    rotate: 0deg;
+  }
+}
 </style>

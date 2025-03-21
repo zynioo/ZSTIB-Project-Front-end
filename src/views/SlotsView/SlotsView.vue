@@ -124,10 +124,9 @@ const checkResults = () => {
     isWin.value = true;
     jokerDrawed.value = true;
     launchConfetti();
-  }
-  else if (
+  } else if (
     drawedNumbersAray.value[1][0] == drawedNumbersAray.value[1][1] &&
-    drawedNumbersAray.value[1][1] == drawedNumbersAray.value[1][2] 
+    drawedNumbersAray.value[1][1] == drawedNumbersAray.value[1][2]
   ) {
     wallet.value += stake.value * 3;
     isWin.value = true;
