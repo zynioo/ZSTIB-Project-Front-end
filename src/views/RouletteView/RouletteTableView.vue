@@ -338,17 +338,21 @@ const formattedTable = computed(() => {
     vertical-align: middle;
     line-height: 35px;
   }
+  .cell {
+    rotate: 0deg;
+  }
 
   .number {
     width: 90%;
     height: 65%;
     font-size: 12px;
+    rotate: -90deg;
   }
 
   .inCellTextBorder {
     width: 60px;
     line-height: 20px;
-    font-size: 10px;
+    font-size: 9px;
     padding: 2px;
   }
 
