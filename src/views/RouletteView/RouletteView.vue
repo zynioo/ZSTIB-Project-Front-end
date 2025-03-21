@@ -74,8 +74,8 @@
   </div>
 </template>
 <script setup lang="ts">
-import HeaderOfGame from "@/components/HeaderOfGame.vue";
-import RouletteTableView from "@/views/RouletteView/RouletteTableView.vue";
+import HeaderOfGame from "../../components/HeaderOfGame.vue";
+import RouletteTableView from "./RouletteTableView.vue";
 import { ref } from "vue";
 
 // Reference to the stake input field in the DOM
