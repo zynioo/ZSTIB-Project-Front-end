@@ -1,5 +1,5 @@
 <template>
-  <div class="roulette-container container col-xxl-10" v-if="windowWidth > 575">
+  <div class="roulette-container container col-xxl-10" v-if="windowWidth > 768">
     <div class="row p-0 m-0 w-100 main-row">
       <HeaderOfGame>
         <template #header>
