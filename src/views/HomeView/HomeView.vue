@@ -181,9 +181,9 @@ const works: Work[] = [
     href: "/lotto",
   },
   {
-    title: "Lorem Ipsum",
-    imgSrc: "TP.png",
-    href: "",
+    title: "Kamień, Papier, Nożyce",
+    imgSrc: "rockPaperScissorsPreview.png",
+    href: "/rockPaperScissors",
   },
 ];
 </script>
