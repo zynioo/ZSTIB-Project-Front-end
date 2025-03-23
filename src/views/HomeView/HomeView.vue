@@ -182,7 +182,7 @@ const works: Work[] = [
   },
   {
     title: "Kamień, Papier, Nożyce",
-    imgSrc: "TP.png",
+    imgSrc: "rockPaperScissorsPreview.png",
     href: "/rockPaperScissors",
   },
 ];
