@@ -1,9 +1,10 @@
 <template>
   <a :href="href" class="card-body mr-1 d-flex flex-column align-items-center">
     <img
-      :src="require(`../../assets/Photos/${imgSrc}`)"
+      :src="require(`../../assets/Photos/gamePreviews/${imgSrc}`)"
       alt="Work"
       :class="imgSrc"
+      class=""
     />
     <h3 class="card-text">
       {{ title }}
