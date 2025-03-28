@@ -14,7 +14,7 @@
       </div>
     </div>
 
-    <div class="container d-flex flex-wrap">
+    <div class="container d-flex flex-wrap p-5">
       <OfferVueBlock
         v-for="(work, index) in works"
         :key="index"
@@ -37,7 +37,7 @@ interface Work {
 }
 
 const works: Work[] = [
-{
+  {
     title: "Ruletka",
     imgSrc: "RoulettePreview.png",
     href: "/roulette",
@@ -58,12 +58,12 @@ const works: Work[] = [
     href: "/rockPaperScissors",
   },
   {
-    title: "Soon",
+    title: "Nie długo",
     imgSrc: "pytajnik.png",
     href: "/offer",
   },
   {
-    title: "Soon",
+    title: "Nie Długo",
     imgSrc: "pytajnik.png",
     href: "/offer",
   },

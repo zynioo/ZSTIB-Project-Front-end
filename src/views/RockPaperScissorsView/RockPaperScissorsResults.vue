@@ -55,7 +55,7 @@ const options: string[] = ["rock", "paper", "scissors"];
     margin-top: 1rem;
   }
   .choice {
-    width: 100%;
+    width: 75%;
     height: auto;
     transition: transform 0.2s;
   }
@@ -68,6 +68,7 @@ const options: string[] = ["rock", "paper", "scissors"];
 }
 @media (max-width: 960px) {
   .choice {
+    width: 100% !important;
     max-width: 200px;
   }
 
