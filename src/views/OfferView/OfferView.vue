@@ -58,9 +58,9 @@ const works: Work[] = [
     href: "/rockPaperScissors",
   },
   {
-    title: "Nie długo",
+    title: "Kursy walut",
     imgSrc: "pytajnik.png",
-    href: "/offer",
+    href: "/exchangeRates",
   },
   {
     title: "Nie Długo",
