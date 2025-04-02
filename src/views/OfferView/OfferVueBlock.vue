@@ -7,11 +7,7 @@
       :src="require(`../../assets/Photos/gamePreviews/${imgSrc}`)"
       alt="Work"
       :class="imgSrc"
-<<<<<<< HEAD
       class="project-img"
-=======
-      class=""
->>>>>>> f24c6b5d24adba3d6fa39454e3f750cd5c3f85ec
     />
     <h3 class="card-text">
       {{ title }}
