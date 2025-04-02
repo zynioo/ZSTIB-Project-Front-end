@@ -14,7 +14,7 @@
       </div>
     </div>
 
-    <div class="container d-flex flex-wrap">
+    <div class="container d-flex flex-wrap p-5">
       <OfferVueBlock
         v-for="(work, index) in works"
         :key="index"
@@ -39,34 +39,34 @@ interface Work {
 
 const works: Work[] = [
   {
+    title: "Ruletka",
+    imgSrc: "RoulettePreview.png",
+    href: "/roulette",
+  },
+  {
+    title: "Jednoręki Bandyta",
+    imgSrc: "SlotsPreview.png",
+    href: "/slots",
+  },
+  {
     title: "Lotto Simulator",
-    imgSrc: "pytajnik.png",
+    imgSrc: "LottoPreview.png",
     href: "/lotto",
   },
   {
-    title: "Przykładowy tytuł",
-    imgSrc: "pytajnik.png",
-    href: "/",
+    title: "Kamień, Papier, Nożyce",
+    imgSrc: "rockPaperScissorsPreview.png",
+    href: "/rockPaperScissors",
   },
   {
-    title: "Przykładowy tytuł",
+    title: "Nie długo",
     imgSrc: "pytajnik.png",
-    href: "/",
+    href: "/offer",
   },
   {
-    title: "Przykładowy tytuł",
+    title: "Nie Długo",
     imgSrc: "pytajnik.png",
-    href: "/",
-  },
-  {
-    title: "Przykładowy tytuł",
-    imgSrc: "pytajnik.png",
-    href: "/",
-  },
-  {
-    title: "Przykładowy tytuł",
-    imgSrc: "pytajnik.png",
-    href: "/",
+    href: "/offer",
   },
 ];
 </script>

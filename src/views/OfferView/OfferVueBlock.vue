@@ -1,15 +1,23 @@
 <template>
-  <a :href="href" class="card-body mr-1 d-flex flex-column align-items-center">
+  <RouterLink
+    :to="href"
+    class="card-body mr-1 d-flex flex-column align-items-center"
+  >
     <img
-      :src="require(`../../assets/Photos/${imgSrc}`)"
+      :src="require(`../../assets/Photos/gamePreviews/${imgSrc}`)"
       alt="Work"
       :class="imgSrc"
+<<<<<<< HEAD
+      class="project-img"
+=======
+      class=""
+>>>>>>> f24c6b5d24adba3d6fa39454e3f750cd5c3f85ec
     />
     <h3 class="card-text">
       {{ title }}
     </h3>
-    <div class="btn-group">
-      <a class="link" :href="href"
+    <div class="btn-group mb-5">
+      <RouterLink class="link" :to="href"
         >Zobacz projekt
         <svg
           class="arrow-icon"
@@ -37,12 +45,14 @@
             ></path>
           </g>
         </svg>
-      </a>
+      </RouterLink>
     </div>
-  </a>
+  </RouterLink>
 </template>
 
 <script setup lang="ts">
+import { RouterLink } from "vue-router";
+
 defineProps<{
   title: string;
   imgSrc: string;
@@ -99,6 +109,10 @@ a {
 }
 .card-body {
   width: 33% !important;
+}
+.project-img {
+  margin-bottom: 0.8rem;
+  height: 230px;
 }
 @media (max-width: 991px) {
   .card-body {

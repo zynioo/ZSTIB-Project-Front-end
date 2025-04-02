@@ -37,6 +37,15 @@
           placeholder="Wpisz stawkę zakładu"
         />
         <button class="spin-button" @click="checkCanPlay">Zakręć</button>
+        <div class="lost" v-if="lost">
+          Przegrałeś wszystkie pieniądze
+          <a
+            class="link"
+            target="_blank"
+            href="https://www.youtube.com/watch?v=4Y8s4UIrqPQ&ab_channel=KrajoweBiurods.Przeciwdzia%C5%82aniaNarkomaniiKBPN"
+            >Kliknij aby zasilić konto</a
+          >
+        </div>
       </div>
     </div>
   </div>
@@ -58,6 +67,7 @@ const wallet = ref(1000);
 const stake = ref(0); // Stake for each game
 const isWin = ref(false);
 const jokerDrawed = ref(false);
+const lost = ref(false);
 /**
  *This function randomizes numbers in the Slots game
  * @param delay - delay between each number change
@@ -101,6 +111,10 @@ const checkCanPlay = () => {
     alert("Stawka musi być większa od 0");
     return false;
   }
+  if (wallet.value == 0) {
+    lost.value = true;
+    return false;
+  }
   changeNumbers();
 };
 const changeNumbers = () => {
@@ -139,6 +153,9 @@ const checkResults = () => {
     isWin.value = true;
   } else {
     wallet.value -= stake.value;
+    if (wallet.value == 0) {
+      lost.value = true;
+    }
   }
 };
 const launchConfetti = () => {
@@ -222,6 +239,20 @@ input[type="number"]::-webkit-outer-spin-button {
 input[type="number"] {
   appearance: textfield;
   -moz-appearance: textfield;
+}
+.lost {
+  width: 100%;
+  font-size: 1.5rem;
+  color: var(--white);
+  text-align: center;
+  margin-top: 1rem;
+  a {
+    color: var(--lose);
+    font-weight: medium;
+    font-size: 1.8rem;
+    text-decoration: none;
+    cursor: pointer;
+  }
 }
 @media (max-width: 967px) {
   .Slots-container {
