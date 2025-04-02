@@ -21,6 +21,7 @@
         :title="work.title"
         :imgSrc="work.imgSrc"
         :href="work.href"
+        class="col-md-3"
       >
       </OfferVueBlock>
     </div>
