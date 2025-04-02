@@ -12,7 +12,7 @@
       />
       <h2>Twoja decyzja</h2>
     </div>
-    <div class="result-text">{{ result }}</div>
+    <div class="result-text">{{ props.result }}</div>
     <div class="game-results">
       <img
         :src="
