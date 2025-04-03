@@ -22,8 +22,7 @@
 <script setup>
 import { onMounted } from "vue";
 import HeaderOfGame from "@/components/HeaderOfGame.vue";
-import ExchangeRatesPanel from "./EchangeRatesPanel.vue";
-
+import ExchangeRatesPanel from "./ExchangeRatesPanel.vue";
 onMounted(() => {
   document.title = "Kursy Walut NBP";
 });
