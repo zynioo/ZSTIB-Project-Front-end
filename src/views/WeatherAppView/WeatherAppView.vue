@@ -9,8 +9,8 @@
       </template>
       <template #description>
         <p>
-          O to aplikacja do sprawdzania pogody, podaj nazwe miasta dla której
-          chcesz sprawdzić pogode
+          Oto aplikacja do sprawdzania pogody, podaj nazwę miasta dla której
+          chcesz sprawdzić pogodę
         </p>
       </template>
     </HeaderOfGame>
