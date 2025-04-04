@@ -63,9 +63,9 @@ const works: Work[] = [
     href: "/exchangeRates",
   },
   {
-    title: "Nie Długo",
+    title: "Pogoda",
     imgSrc: "pytajnik.png",
-    href: "/offer",
+    href: "/weatherApp",
   },
 ];
 </script>
