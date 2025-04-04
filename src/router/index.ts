@@ -7,6 +7,7 @@ import LottoGameView from "@/views/LottoGameView/LottoGameView.vue";
 import SlotsView from "@/views/SlotsView/SlotsView.vue";
 import RouletteView from "@/views/RouletteView/RouletteView.vue";
 import RockPaperScissorsView from "@/views/RockPaperScissorsView/RockPaperScissorsView.vue";
+import ExchangeRatesView from "@/views/ExchangeRatesView/ExchangeRatesView.vue";
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
@@ -47,6 +48,11 @@ const routes: Array<RouteRecordRaw> = [
     path: "/rockPaperScissors",
     name: "Rock Paper Scissors",
     component: RockPaperScissorsView,
+  },
+  {
+    path: "/exchangeRates",
+    name: "Exchange Rates",
+    component: ExchangeRatesView,
   },
 ];
 
