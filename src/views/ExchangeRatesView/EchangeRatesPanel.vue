@@ -166,27 +166,34 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import { ref, computed, onMounted, watch } from "vue";
 
-// State
-const allRates = ref([]); // Combined rates from all tables
-const displayRates = ref([]); // Filtered/sorted rates for display
-const loading = ref(true);
-const dateInfo = ref("Ładowanie danych...");
-const amount = ref(100);
-const fromCurrency = ref("EUR");
-const toCurrency = ref("PLN");
-const resultConverted = ref(0);
-const showResult = ref(false);
-const tableInfos = ref([]);
+type CurrencyRate = {
+  code: string;
+  currency: string;
+  mid: number;
+};
+
+type SortMethods = "default" | "strongest" | "weakest" | "alphabetical";
+
+const allRates = ref<CurrencyRate[]>([]);
+const displayRates = ref<CurrencyRate[]>([]);
+const loading = ref<boolean>(true);
+const dateInfo = ref<string>("Ładowanie danych...");
+const amount = ref<number>(100);
+const fromCurrency = ref<string>("EUR");
+const toCurrency = ref<string>("PLN");
+const resultConverted = ref<number>(0);
+const showResult = ref<boolean>(false);
+const tableInfos = ref<string[]>([]);
 
 // Pagination state
 const itemsPerPage = 20;
-const currentPage = ref(1);
+const currentPage = ref<number>(1);
 
 // Sorting state
-const currentSort = ref("default");
+const currentSort = ref<SortMethods>("default");
 const sortMethods = {
   default: "Domyślnie",
   strongest: "Najsilniejsze",
@@ -200,99 +207,23 @@ const sortIcons = {
   alphabetical: "fas fa-sort-alpha-down",
 };
 
-// Currency to country code mapping for flags
-const currencyToCountry = {
-  USD: "us",
-  EUR: "eu",
-  CHF: "ch",
-  GBP: "gb",
-  JPY: "jp",
-  AUD: "au",
-  CAD: "ca",
-  HKD: "hk",
-  NZD: "nz",
-  SEK: "se",
-  DKK: "dk",
-  NOK: "no",
-  CZK: "cz",
-  HUF: "hu",
-  RON: "ro",
-  BGN: "bg",
-  TRY: "tr",
-  ILS: "il",
-  CLP: "cl",
-  PHP: "ph",
-  MXN: "mx",
-  ZAR: "za",
-  BRL: "br",
-  MYR: "my",
-  RUB: "ru",
-  IDR: "id",
-  INR: "in",
-  KRW: "kr",
-  CNY: "cn",
-  XDR: "un",
-  THB: "th",
-  SGD: "sg",
-  UAH: "ua",
-  AED: "ae",
-  AFN: "af",
-  ALL: "al",
-  AMD: "am",
-  ARS: "ar",
-  AZN: "az",
-  BAM: "ba",
-  BDT: "bd",
-  BHD: "bh",
-  BYN: "by",
-  BOB: "bo",
-  COP: "co",
-  CRC: "cr",
-  DZD: "dz",
-  EGP: "eg",
-  GEL: "ge",
-  GHS: "gh",
-  HNL: "hn",
-  HRK: "hr",
-  ISK: "is",
-  JOD: "jo",
-  KES: "ke",
-  KGS: "kg",
-  KHR: "kh",
-  KWD: "kw",
-  KZT: "kz",
-  LBP: "lb",
-  LKR: "lk",
-  MAD: "ma",
-  MDL: "md",
-  MKD: "mk",
-  MMK: "mm",
-  MNT: "mn",
-  MUR: "mu",
-  MZN: "mz",
-  NGN: "ng",
-  NPR: "np",
-  OMR: "om",
-  PAB: "pa",
-  PEN: "pe",
-  PKR: "pk",
-  PLN: "pl",
-  PYG: "py",
-  QAR: "qa",
-  RSD: "rs",
-  SAR: "sa",
-  SZL: "sz",
-  TND: "tn",
-  TTD: "tt",
-  TWD: "tw",
-  TZS: "tz",
-  UYU: "uy",
-  UZS: "uz",
-  VES: "ve",
-  VND: "vn",
-  XAF: "cf",
-  XOF: "ci",
-  XPF: "pf",
+const currencyToCountry: Record<string, string> = {
+  USD: "us", EUR: "eu", CHF: "ch", GBP: "gb", JPY: "jp", AUD: "au", 
+  CAD: "ca", HKD: "hk", NZD: "nz", SEK: "se", DKK: "dk", NOK: "no", 
+  CZK: "cz", HUF: "hu", RON: "ro", BGN: "bg", TRY: "tr", ILS: "il", 
+  CLP: "cl", PHP: "ph", MXN: "mx", ZAR: "za", BRL: "br", MYR: "my", 
+  RUB: "ru", IDR: "id", INR: "in", KRW: "kr", CNY: "cn", XDR: "un", 
+  THB: "th", SGD: "sg", UAH: "ua", AED: "ae", AFN: "af", ALL: "al", 
+  AMD: "am", ARS: "ar", AZN: "az", BAM: "ba", BDT: "bd", BHD: "bh", 
+  BYN: "by", BOB: "bo", COP: "co", CRC: "cr", DZD: "dz", EGP: "eg", 
+  GEL: "ge", GHS: "gh", HNL: "hn", HRK: "hr", ISK: "is", JOD: "jo", 
+  KES: "ke", KGS: "kg", KHR: "kh", KWD: "kw", KZT: "kz", LBP: "lb", 
+  LKR: "lk", MAD: "ma", MDL: "md", MKD: "mk", MMK: "mm", MNT: "mn", 
+  MUR: "mu", MZN: "mz", NGN: "ng", NPR: "np", OMR: "om", PAB: "pa", 
+  PEN: "pe", PKR: "pk", PLN: "pl", PYG: "py", QAR: "qa", RSD: "rs", 
+  SAR: "sa", SZL: "sz", TND: "tn", TTD: "tt", TWD: "tw", TZS: "tz", 
+  UYU: "uy", UZS: "uz", VES: "ve", VND: "vn", XAF: "cf", XOF: "ci", 
+  XPF: "pf"
 };
 
 // Computed properties
@@ -318,7 +249,7 @@ const visiblePageNumbers = computed(() => {
     startPage = Math.max(1, endPage - 4);
   }
 
-  const pageNumbers = [];
+  const pageNumbers:number[] = [];
   for (let i = startPage; i <= endPage; i++) {
     pageNumbers.push(i);
   }
@@ -356,25 +287,22 @@ const resultRate = computed(() => {
 });
 
 // Methods
-const getCurrencyCountryCode = (code) => {
-  return (
-    currencyToCountry[code] ||
-    (code ? code.slice(0, 2).toLowerCase() : "unknown")
-  );
+const getCurrencyCountryCode = (code: string): string => {
+  return currencyToCountry[code] || (code ? code.slice(0, 2).toLowerCase() : "unknown");
 };
 
-const formatCurrency = (currency) => {
+const formatCurrency = (currency: string): string => {
   return currency.charAt(0).toUpperCase() + currency.slice(1).toLowerCase();
 };
 
-const formatRate = (rate) => {
+const formatRate = (rate: number): string => {
   return new Intl.NumberFormat("pl-PL", {
     minimumFractionDigits: 4,
     maximumFractionDigits: 4,
   }).format(rate);
 };
 
-const formatAmount = (value) => {
+const formatAmount = (value: number | null | undefined): string => {
   if (value === null || value === undefined) return "";
   return new Intl.NumberFormat("pl-PL", {
     minimumFractionDigits: 2,
@@ -382,8 +310,8 @@ const formatAmount = (value) => {
   }).format(value);
 };
 
-const handleFlagError = (event) => {
-  const img = event.target;
+const handleFlagError = (event: Event): void => {
+  const img = event.target as HTMLImageElement;
   img.style.display = "none";
 
   // Create icon element to replace the flag
@@ -401,7 +329,7 @@ const handleFlagError = (event) => {
   }
 };
 
-const getRateForCurrency = (currencyCode) => {
+const getRateForCurrency = (currencyCode: string): number => {
   // PLN is the base currency with rate 1
   if (currencyCode === "PLN") return 1;
 
@@ -409,8 +337,8 @@ const getRateForCurrency = (currencyCode) => {
   return currency ? currency.mid : 0;
 };
 
-const convertCurrency = () => {
-  const amountValue = parseFloat(amount.value);
+const convertCurrency = (): void => {
+  const amountValue = parseFloat(amount.value.toString());
   if (!amountValue || isNaN(amountValue)) return;
 
   const fromRate = getRateForCurrency(fromCurrency.value);
@@ -426,7 +354,7 @@ const convertCurrency = () => {
   }
 };
 
-const swapCurrencies = () => {
+const swapCurrencies = (): void => {
   const temp = fromCurrency.value;
   fromCurrency.value = toCurrency.value;
   toCurrency.value = temp;
@@ -434,12 +362,12 @@ const swapCurrencies = () => {
   convertCurrency();
 };
 
-const setCurrencyFromTableRow = (currencyCode) => {
+const setCurrencyFromTableRow = (currencyCode: string): void => {
   toCurrency.value = currencyCode;
   convertCurrency();
 };
 
-const sortCurrencies = (rates, sortMethod) => {
+const sortCurrencies = (rates: CurrencyRate[], sortMethod: SortMethods): CurrencyRate[] => {
   switch (sortMethod) {
     case "strongest":
       // Sort by exchange rate - strongest first (highest rate)
@@ -456,31 +384,31 @@ const sortCurrencies = (rates, sortMethod) => {
   }
 };
 
-const changeSort = (sortMethod) => {
+const changeSort = (sortMethod: SortMethods): void => {
   currentSort.value = sortMethod;
   currentPage.value = 1; // Reset to first page when sorting changes
 };
 
-const prevPage = () => {
+const prevPage = (): void => {
   if (currentPage.value > 1) {
     currentPage.value--;
   }
 };
 
-const nextPage = () => {
+const nextPage = (): void => {
   if (currentPage.value < totalPages.value) {
     currentPage.value++;
   }
 };
 
-const goToPage = (pageNum) => {
+const goToPage = (pageNum: number): void => {
   currentPage.value = pageNum;
 };
 
 // Remove duplicates from combined tables
-const removeDuplicates = (rates) => {
-  const uniqueRates = [];
-  const seenCodes = new Set();
+const removeDuplicates = (rates: CurrencyRate[]): CurrencyRate[] => {
+  const uniqueRates: CurrencyRate[] = [];
+  const seenCodes = new Set<string>();
 
   rates.forEach((rate) => {
     if (!seenCodes.has(rate.code)) {
@@ -492,77 +420,25 @@ const removeDuplicates = (rates) => {
   return uniqueRates;
 };
 
-// Fetch all tables and combine them
-const fetchAllRates = async () => {
-  loading.value = true;
-  showResult.value = false;
-
+// Fetch data on mount
+onMounted(async () => {
   try {
-    // Fetch all tables: A, B, and C
-    const [aResponse, bResponse, cResponse] = await Promise.all([
-      fetch("https://api.nbp.pl/api/exchangerates/tables/a/?format=json"),
-      fetch("https://api.nbp.pl/api/exchangerates/tables/b/?format=json"),
-      fetch("https://api.nbp.pl/api/exchangerates/tables/c/?format=json"),
-    ]);
+    const response = await fetch("https://api.nbp.pl/api/exchangerates/tables/A/?format=json");
+    const data = await response.json();
 
-    if (!aResponse.ok || !bResponse.ok || !cResponse.ok) {
-      throw new Error("Network response was not ok");
-    }
+    const table = data[0]; // First table in the response
+    const rates = removeDuplicates(table.rates);
 
-    const [aData, bData, cData] = await Promise.all([
-      aResponse.json(),
-      bResponse.json(),
-      cResponse.json(),
-    ]);
+    allRates.value = rates;
+    displayRates.value = rates;
 
-    // Combine all rates
-    const combinedRates = [
-      ...aData[0].rates,
-      ...bData[0].rates,
-      ...cData[0].rates,
-    ];
-
-    // Remove duplicates
-    allRates.value = removeDuplicates(combinedRates);
-    displayRates.value = [...allRates.value];
-
-    // Set the latest date
-    const dates = [
-      aData[0].effectiveDate,
-      bData[0].effectiveDate,
-      cData[0].effectiveDate,
-    ];
-    const latestDate = new Date(
-      Math.max(...dates.map((date) => new Date(date)))
-    );
-    tableInfos.value = [aData[0].no, bData[0].no, cData[0].no];
-
-    dateInfo.value = `Dane z: ${latestDate.toLocaleDateString("pl-PL")} (${tableInfos.value.join(", ")})`;
-
-    // Set default values if not already set
-    if (fromCurrency.value === "PLN" && toCurrency.value === "PLN") {
-      fromCurrency.value = "EUR";
-      toCurrency.value = "PLN";
-    }
-
-    // Do initial conversion
-    convertCurrency();
+    // Set date information from API response
+    dateInfo.value = `Dane z dnia ${table.effectiveDate}`;
   } catch (error) {
-    dateInfo.value = `Wystąpił błąd: ${error.message}`;
-    console.error("Error fetching rates:", error);
+    console.error("Błąd podczas pobierania danych:", error);
   } finally {
     loading.value = false;
   }
-};
-
-// Watch for currency changes to update highlighting
-watch([fromCurrency, toCurrency], () => {
-  convertCurrency();
-});
-
-// Fetch rates on component mount
-onMounted(() => {
-  fetchAllRates();
 });
 </script>
 
