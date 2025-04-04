@@ -6,7 +6,7 @@
     <div class="services-header">
       <div class="services-header-content">
         <hr class="line" />
-        <span></span>
+        <slot name="author"></slot>
       </div>
       <div class="services-description">
         <slot name="description"></slot>

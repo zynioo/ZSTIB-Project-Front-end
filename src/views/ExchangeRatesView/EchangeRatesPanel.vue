@@ -441,7 +441,6 @@ onMounted(async () => {
   }
 });
 </script>
-
 <style scoped>
 :root {
   --primary: #007b41;

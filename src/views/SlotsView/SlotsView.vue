@@ -5,6 +5,9 @@
         <template #header>
           <h2>Jednoręki Bandyta</h2>
         </template>
+        <template #author>
+          <span>Michał Zajac</span>
+        </template>
         <template #description>
           Przed tobą klasyczny jednoręki bandyta. Zagraj i sprawdź swoje
           szczęście!

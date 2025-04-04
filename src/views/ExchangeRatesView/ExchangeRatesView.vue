@@ -4,6 +4,9 @@
       <template #header>
         <h2>Kursy Walut NBP</h2>
       </template>
+      <template #author>
+        <span>Maciej Smoleń</span>
+      </template>
       <template #description>
         <p>
           Sprawdź aktualne kursy walut Narodowego Banku Polskiego i przeliczaj

@@ -6,6 +6,9 @@
           <template #header>
             <h2>Symlator Lotto</h2>
           </template>
+          <template #author>
+            <span>Milan Sułek</span>
+          </template>
           <template #description>
             <p>
               To jeden z naszych projektów, tworzonych na lekcjach. Symuluje on

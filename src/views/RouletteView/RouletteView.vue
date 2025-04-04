@@ -5,6 +5,9 @@
         <template #header>
           <h2>Ruletka</h2>
         </template>
+        <template #author>
+          <span>Milan Sułek</span>
+        </template>
         <template #description>
           Oto klasyczna ruletka. Zagraj i sprawdź swoje szczęście!
           <br />

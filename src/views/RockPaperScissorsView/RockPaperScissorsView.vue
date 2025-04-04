@@ -5,6 +5,9 @@
         <template #header>
           <h2>Kamień Papier Nozyce</h2>
         </template>
+        <template #author>
+          <span>Michał Zajac</span>
+        </template>
         <template #description>
           <p>
             Wybierz jedną z opcji i sprawdź czy wygrasz z komputerem!
