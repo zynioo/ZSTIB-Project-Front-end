@@ -22,6 +22,11 @@
             :cityName="city"
             :weather="weatherHolder"
           />
+          <div v-if="errorExsist">
+            <p class="weather-results-content">
+              Wpisz miasto, aby sprawdzić pogodę.
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -53,6 +58,7 @@ export interface IWeather {
   };
 }
 const city = ref<string>("");
+const errorExsist = ref(false); //set error variable to false
 const weatherHolder = ref<IWeather | null>(null); //set weather variable to null
 const getWeather = async () => {
   try {
@@ -67,8 +73,10 @@ const getWeather = async () => {
     //Set values to HTML elements
     console.log("weather", weather);
     weatherHolder.value = weather;
+    errorExsist.value = false; //set error variable to false
     console.log("weatherHolder", weatherHolder.value);
   } catch (error) {
+    errorExsist.value = true; //set error variable to true
     console.error("Error fetching weather data:", error);
   }
 };
@@ -163,6 +171,7 @@ const getWeather = async () => {
 
 .weather-results-content {
   min-height: 100px;
+  color: red;
 }
 @media (max-width: 950px) {
   .weather-app-panel {
