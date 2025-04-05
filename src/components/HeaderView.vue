@@ -25,11 +25,6 @@
             >
           </li>
           <li class="nav-item">
-            <RouterLink class="nav-link" to="/offer" @click.native="closeNavbar"
-              >Nasze projekty</RouterLink
-            >
-          </li>
-          <li class="nav-item">
             <RouterLink
               class="nav-link"
               to="/aboutUs"
@@ -38,6 +33,11 @@
             >
           </li>
           <li class="nav-item border">
+            <RouterLink class="nav-link" to="/offer" @click.native="closeNavbar"
+              >Nasze projekty</RouterLink
+            >
+          </li>
+          <!-- <li class="nav-item border">
             <RouterLink
               class="nav-link last"
               to="/contact"
@@ -45,7 +45,7 @@
               @click.native="closeNavbar"
               >Dołącz do nas</RouterLink
             >
-          </li>
+          </li> -->
         </ul>
       </div>
     </div>

@@ -21,7 +21,7 @@
 <div class="row">
     <div class="col-lg-6">
         <div class="services-header footer-header">
-            <p>Stronę wykonali uczniowie: <a href="/">Milan Sułek</a>, <a href="/">Michał Zając</a> oraz <a href="/">Michał Zachara</a></p>
+            <p>Stronę wykonali uczniowie: <a href="https://github.com/zynioo" target="_blank">Milan Sułek</a> oraz <a href="https://github.com/michalzajac123" target="_blank">Michał Zając</a></p>
         </div>
     </div>
 
@@ -29,9 +29,9 @@
         <div class="services-header footer-header">
         
             <div class="services-header-right-block list-unstyled footer-header">
-            <li class="ms-3"><a class="text-body-secondary" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#twitter"/></svg></a></li>
-            <li class="ms-3"><a class="text-body-secondary" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#instagram"/></svg></a></li>
-            <li class="ms-3"><a class="text-body-secondary" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#facebook"/></svg></a></li>
+            <!-- <li class="ms-3"><a class="text-body-secondary" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#twitter"/></svg></a></li> -->
+            <li class="ms-3"><a class="text-body-secondary" href="https://www.instagram.com/brzeska_zielonka_zstib/" target="_blank"><svg class="bi" width="24" height="24"><use xlink:href="#instagram"/></svg></a></li>
+            <li class="ms-3"><a class="text-body-secondary" href="https://www.facebook.com/zsp2brzesko/" target="_blank"><svg class="bi" width="24" height="24"><use xlink:href="#facebook"/></svg></a></li>
             </div>
         </div>
     </div>

@@ -1,7 +1,7 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
 import HomeView from "../views/HomeView/HomeView.vue";
 import AboutUsView from "../views/AboutUsView/AboutUsView.vue";
-import ContactView from "../views/ContactView/Contact.vue";
+// import ContactView from "../views/ContactView/Contact.vue";
 import OfferView from "@/views/OfferView/OfferView.vue";
 import LottoGameView from "@/views/LottoGameView/LottoGameView.vue";
 import SlotsView from "@/views/SlotsView/SlotsView.vue";
@@ -15,11 +15,11 @@ const routes: Array<RouteRecordRaw> = [
     name: "home",
     component: HomeView,
   },
-  {
-    path: "/contact",
-    name: "Contact",
-    component: ContactView,
-  },
+  // {
+  //   path: "/contact",
+  //   name: "Contact",
+  //   component: ContactView,
+  // },
   {
     path: "/aboutUs",
     name: "aboutUs",
