@@ -166,14 +166,14 @@
   </div>
 </template>
 
-<script lang="ts" setup> 
-import { ref, computed, onMounted, watch } from "vue"; 
+<script lang="ts" setup>
+import { ref, computed, onMounted, watch } from "vue";
 
-type CurrencyRate = { 
+type CurrencyRate = {
   code: string;
   currency: string;
-  mid: number; 
-}; 
+  mid: number;
+};
 
 type TableInfo = {
   table: string;
@@ -181,316 +181,396 @@ type TableInfo = {
   rates: CurrencyRate[];
 };
 
-type SortMethods = "default" | "strongest" | "weakest" | "alphabetical"; 
+type SortMethods = "default" | "strongest" | "weakest" | "alphabetical";
 
-const allRates = ref<CurrencyRate[]>([]); 
-const displayRates = ref<CurrencyRate[]>([]); 
-const loading = ref<boolean>(true); 
-const dateInfo = ref<string>("Ładowanie danych..."); 
-const amount = ref<number>(100); 
-const fromCurrency = ref<string>("EUR"); 
-const toCurrency = ref<string>("PLN"); 
-const resultConverted = ref<number>(0); 
-const showResult = ref<boolean>(false); 
-const tableInfos = ref<string[]>([]); 
+const allRates = ref<CurrencyRate[]>([]);
+const displayRates = ref<CurrencyRate[]>([]);
+const loading = ref<boolean>(true);
+const dateInfo = ref<string>("Ładowanie danych...");
+const amount = ref<number>(100);
+const fromCurrency = ref<string>("EUR");
+const toCurrency = ref<string>("PLN");
+const resultConverted = ref<number>(0);
+const showResult = ref<boolean>(false);
+const tableInfos = ref<string[]>([]);
 
-// Pagination state 
-const itemsPerPage = 20; 
-const currentPage = ref<number>(1); 
+// Pagination state
+const itemsPerPage = 20;
+const currentPage = ref<number>(1);
 
-// Sorting state 
-const currentSort = ref<SortMethods>("default"); 
-const sortMethods = { 
-  default: "Domyślnie", 
-  strongest: "Najsilniejsze", 
-  weakest: "Najsłabsze", 
-  alphabetical: "Alfabetycznie", 
-}; 
+// Sorting state
+const currentSort = ref<SortMethods>("default");
+const sortMethods = {
+  default: "Domyślnie",
+  strongest: "Najsilniejsze",
+  weakest: "Najsłabsze",
+  alphabetical: "Alfabetycznie",
+};
 
-const sortIcons = { 
-  default: "fas fa-sort", 
-  strongest: "fas fa-sort-amount-up-alt", 
-  weakest: "fas fa-sort-amount-down", 
-  alphabetical: "fas fa-sort-alpha-down", 
-}; 
+const sortIcons = {
+  default: "fas fa-sort",
+  strongest: "fas fa-sort-amount-up-alt",
+  weakest: "fas fa-sort-amount-down",
+  alphabetical: "fas fa-sort-alpha-down",
+};
 
-const currencyToCountry: Record<string, string> = { 
-  USD: "us", EUR: "eu", CHF: "ch", GBP: "gb", JPY: "jp", AUD: "au", 
-  CAD: "ca", HKD: "hk", NZD: "nz", SEK: "se", DKK: "dk", NOK: "no", 
-  CZK: "cz", HUF: "hu", RON: "ro", BGN: "bg", TRY: "tr", ILS: "il", 
-  CLP: "cl", PHP: "ph", MXN: "mx", ZAR: "za", BRL: "br", MYR: "my", 
-  RUB: "ru", IDR: "id", INR: "in", KRW: "kr", CNY: "cn", XDR: "un", 
-  THB: "th", SGD: "sg", UAH: "ua", AED: "ae", AFN: "af", ALL: "al", 
-  AMD: "am", ARS: "ar", AZN: "az", BAM: "ba", BDT: "bd", BHD: "bh", 
-  BYN: "by", BOB: "bo", COP: "co", CRC: "cr", DZD: "dz", EGP: "eg", 
-  GEL: "ge", GHS: "gh", HNL: "hn", HRK: "hr", ISK: "is", JOD: "jo", 
-  KES: "ke", KGS: "kg", KHR: "kh", KWD: "kw", KZT: "kz", LBP: "lb", 
-  LKR: "lk", MAD: "ma", MDL: "md", MKD: "mk", MMK: "mm", MNT: "mn", 
-  MUR: "mu", MZN: "mz", NGN: "ng", NPR: "np", OMR: "om", PAB: "pa", 
-  PEN: "pe", PKR: "pk", PLN: "pl", PYG: "py", QAR: "qa", RSD: "rs", 
-  SAR: "sa", SZL: "sz", TND: "tn", TTD: "tt", TWD: "tw", TZS: "tz", 
-  UYU: "uy", UZS: "uz", VES: "ve", VND: "vn", XAF: "cf", XOF: "ci", 
-  XPF: "pf" 
-}; 
+const currencyToCountry: Record<string, string> = {
+  USD: "us",
+  EUR: "eu",
+  CHF: "ch",
+  GBP: "gb",
+  JPY: "jp",
+  AUD: "au",
+  CAD: "ca",
+  HKD: "hk",
+  NZD: "nz",
+  SEK: "se",
+  DKK: "dk",
+  NOK: "no",
+  CZK: "cz",
+  HUF: "hu",
+  RON: "ro",
+  BGN: "bg",
+  TRY: "tr",
+  ILS: "il",
+  CLP: "cl",
+  PHP: "ph",
+  MXN: "mx",
+  ZAR: "za",
+  BRL: "br",
+  MYR: "my",
+  RUB: "ru",
+  IDR: "id",
+  INR: "in",
+  KRW: "kr",
+  CNY: "cn",
+  XDR: "un",
+  THB: "th",
+  SGD: "sg",
+  UAH: "ua",
+  AED: "ae",
+  AFN: "af",
+  ALL: "al",
+  AMD: "am",
+  ARS: "ar",
+  AZN: "az",
+  BAM: "ba",
+  BDT: "bd",
+  BHD: "bh",
+  BYN: "by",
+  BOB: "bo",
+  COP: "co",
+  CRC: "cr",
+  DZD: "dz",
+  EGP: "eg",
+  GEL: "ge",
+  GHS: "gh",
+  HNL: "hn",
+  HRK: "hr",
+  ISK: "is",
+  JOD: "jo",
+  KES: "ke",
+  KGS: "kg",
+  KHR: "kh",
+  KWD: "kw",
+  KZT: "kz",
+  LBP: "lb",
+  LKR: "lk",
+  MAD: "ma",
+  MDL: "md",
+  MKD: "mk",
+  MMK: "mm",
+  MNT: "mn",
+  MUR: "mu",
+  MZN: "mz",
+  NGN: "ng",
+  NPR: "np",
+  OMR: "om",
+  PAB: "pa",
+  PEN: "pe",
+  PKR: "pk",
+  PLN: "pl",
+  PYG: "py",
+  QAR: "qa",
+  RSD: "rs",
+  SAR: "sa",
+  SZL: "sz",
+  TND: "tn",
+  TTD: "tt",
+  TWD: "tw",
+  TZS: "tz",
+  UYU: "uy",
+  UZS: "uz",
+  VES: "ve",
+  VND: "vn",
+  XAF: "cf",
+  XOF: "ci",
+  XPF: "pf",
+};
 
-// Computed properties 
-const sortedRates = computed(() => { 
-  return sortCurrencies([...displayRates.value], currentSort.value); 
-}); 
+// Computed properties
+const sortedRates = computed(() => {
+  return sortCurrencies([...displayRates.value], currentSort.value);
+});
 
-const totalPages = computed(() => { 
-  return Math.ceil(sortedRates.value.length / itemsPerPage); 
-}); 
+const totalPages = computed(() => {
+  return Math.ceil(sortedRates.value.length / itemsPerPage);
+});
 
-const paginatedRates = computed(() => { 
-  const startIndex = (currentPage.value - 1) * itemsPerPage; 
-  const endIndex = startIndex + itemsPerPage; 
-  return sortedRates.value.slice(startIndex, endIndex); 
-}); 
+const paginatedRates = computed(() => {
+  const startIndex = (currentPage.value - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  return sortedRates.value.slice(startIndex, endIndex);
+});
 
-const visiblePageNumbers = computed(() => { 
-  let startPage = Math.max(1, currentPage.value - 2); 
-  let endPage = Math.min(totalPages.value, startPage + 4); 
-  if (endPage - startPage < 4) { 
-    startPage = Math.max(1, endPage - 4); 
-  } 
-  const pageNumbers:number[] = []; 
-  for (let i = startPage; i <= endPage; i++) { 
-    pageNumbers.push(i); 
-  } 
-  return pageNumbers; 
-}); 
+const visiblePageNumbers = computed(() => {
+  let startPage = Math.max(1, currentPage.value - 2);
+  let endPage = Math.min(totalPages.value, startPage + 4);
+  if (endPage - startPage < 4) {
+    startPage = Math.max(1, endPage - 4);
+  }
+  const pageNumbers: number[] = [];
+  for (let i = startPage; i <= endPage; i++) {
+    pageNumbers.push(i);
+  }
+  return pageNumbers;
+});
 
-const startRange = computed(() => { 
-  return (currentPage.value - 1) * itemsPerPage + 1; 
-}); 
+const startRange = computed(() => {
+  return (currentPage.value - 1) * itemsPerPage + 1;
+});
 
-const endRange = computed(() => { 
-  return Math.min(startRange.value + itemsPerPage - 1, totalCount.value); 
-}); 
+const endRange = computed(() => {
+  return Math.min(startRange.value + itemsPerPage - 1, totalCount.value);
+});
 
-const totalCount = computed(() => { 
-  return displayRates.value.length; 
-}); 
+const totalCount = computed(() => {
+  return displayRates.value.length;
+});
 
-const formattedResultAmount = computed(() => { 
-  return `${formatAmount(amount.value)} ${fromCurrency.value}`; 
-}); 
+const formattedResultAmount = computed(() => {
+  return `${formatAmount(amount.value)} ${fromCurrency.value}`;
+});
 
-const formattedResultConverted = computed(() => { 
-  return `${formatAmount(resultConverted.value)} ${toCurrency.value}`; 
-}); 
+const formattedResultConverted = computed(() => {
+  return `${formatAmount(resultConverted.value)} ${toCurrency.value}`;
+});
 
-const resultRate = computed(() => { 
-  const fromRate = getRateForCurrency(fromCurrency.value); 
-  const toRate = getRateForCurrency(toCurrency.value); 
-  if (!fromRate || !toRate) return ""; 
-  const conversionRate = fromRate / toRate; 
-  return `1 ${fromCurrency.value} = ${formatAmount(conversionRate)} ${toCurrency.value}`; 
-}); 
+const resultRate = computed(() => {
+  const fromRate = getRateForCurrency(fromCurrency.value);
+  const toRate = getRateForCurrency(toCurrency.value);
+  if (!fromRate || !toRate) return "";
+  const conversionRate = fromRate / toRate;
+  return `1 ${fromCurrency.value} = ${formatAmount(conversionRate)} ${toCurrency.value}`;
+});
 
-// Methods 
-const getCurrencyCountryCode = (code: string): string => { 
-  return currencyToCountry[code] || (code ? code.slice(0, 2).toLowerCase() : "unknown"); 
-}; 
+// Methods
+const getCurrencyCountryCode = (code: string): string => {
+  return (
+    currencyToCountry[code] ||
+    (code ? code.slice(0, 2).toLowerCase() : "unknown")
+  );
+};
 
-const formatCurrency = (currency: string): string => { 
-  return currency.charAt(0).toUpperCase() + currency.slice(1).toLowerCase(); 
-}; 
+const formatCurrency = (currency: string): string => {
+  return currency.charAt(0).toUpperCase() + currency.slice(1).toLowerCase();
+};
 
-const formatRate = (rate: number): string => { 
-  return new Intl.NumberFormat("pl-PL", { 
-    minimumFractionDigits: 4, 
-    maximumFractionDigits: 4, 
-  }).format(rate); 
-}; 
+const formatRate = (rate: number): string => {
+  return new Intl.NumberFormat("pl-PL", {
+    minimumFractionDigits: 4,
+    maximumFractionDigits: 4,
+  }).format(rate);
+};
 
-const formatAmount = (value: number | null | undefined): string => { 
-  if (value === null || value === undefined) return ""; 
-  return new Intl.NumberFormat("pl-PL", { 
-    minimumFractionDigits: 2, 
-    maximumFractionDigits: 2, 
-  }).format(value); 
-}; 
+const formatAmount = (value: number | null | undefined): string => {
+  if (value === null || value === undefined) return "";
+  return new Intl.NumberFormat("pl-PL", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(value);
+};
 
-const handleFlagError = (event: Event): void => { 
-  const img = event.target as HTMLImageElement; 
-  img.style.display = "none"; 
-  // Create icon element to replace the flag 
-  const parentElement = img.parentElement; 
-  if (parentElement) { 
-    // Check if an icon already exists 
-    const existingIcon = parentElement.querySelector(".fas.fa-coins"); 
-    if (!existingIcon) { 
-      const icon = document.createElement("i"); 
-      icon.className = "fas fa-coins"; 
-      icon.style.marginRight = "10px"; 
-      icon.style.color = "#00529e"; 
-      parentElement.prepend(icon); 
-    } 
-  } 
-}; 
+const handleFlagError = (event: Event): void => {
+  const img = event.target as HTMLImageElement;
+  img.style.display = "none";
+  // Create icon element to replace the flag
+  const parentElement = img.parentElement;
+  if (parentElement) {
+    // Check if an icon already exists
+    const existingIcon = parentElement.querySelector(".fas.fa-coins");
+    if (!existingIcon) {
+      const icon = document.createElement("i");
+      icon.className = "fas fa-coins";
+      icon.style.marginRight = "10px";
+      icon.style.color = "#00529e";
+      parentElement.prepend(icon);
+    }
+  }
+};
 
-const getRateForCurrency = (currencyCode: string): number => { 
-  // PLN is the base currency with rate 1 
-  if (currencyCode === "PLN") return 1; 
-  const currency = allRates.value.find((rate) => rate.code === currencyCode); 
-  return currency ? currency.mid : 0; 
-}; 
+const getRateForCurrency = (currencyCode: string): number => {
+  // PLN is the base currency with rate 1
+  if (currencyCode === "PLN") return 1;
+  const currency = allRates.value.find((rate) => rate.code === currencyCode);
+  return currency ? currency.mid : 0;
+};
 
-const convertCurrency = (): void => { 
-  const amountValue = parseFloat(amount.value.toString()); 
-  if (!amountValue || isNaN(amountValue)) return; 
-  const fromRate = getRateForCurrency(fromCurrency.value); 
-  const toRate = getRateForCurrency(toCurrency.value); 
-  if (fromRate && toRate) { 
-    // Convert to PLN first, then to target currency 
-    const inPLN = amountValue * fromRate; 
-    resultConverted.value = toRate === 1 ? inPLN : inPLN / toRate; 
-    // Show result container 
-    showResult.value = true; 
-  } 
-}; 
+const convertCurrency = (): void => {
+  const amountValue = parseFloat(amount.value.toString());
+  if (!amountValue || isNaN(amountValue)) return;
+  const fromRate = getRateForCurrency(fromCurrency.value);
+  const toRate = getRateForCurrency(toCurrency.value);
+  if (fromRate && toRate) {
+    // Convert to PLN first, then to target currency
+    const inPLN = amountValue * fromRate;
+    resultConverted.value = toRate === 1 ? inPLN : inPLN / toRate;
+    // Show result container
+    showResult.value = true;
+  }
+};
 
-const swapCurrencies = (): void => { 
-  const temp = fromCurrency.value; 
-  fromCurrency.value = toCurrency.value; 
-  toCurrency.value = temp; 
-  convertCurrency(); 
-}; 
+const swapCurrencies = (): void => {
+  const temp = fromCurrency.value;
+  fromCurrency.value = toCurrency.value;
+  toCurrency.value = temp;
+  convertCurrency();
+};
 
-const setCurrencyFromTableRow = (currencyCode: string): void => { 
-  toCurrency.value = currencyCode; 
-  convertCurrency(); 
-}; 
+const setCurrencyFromTableRow = (currencyCode: string): void => {
+  toCurrency.value = currencyCode;
+  convertCurrency();
+};
 
-const sortCurrencies = (rates: CurrencyRate[], sortMethod: SortMethods): CurrencyRate[] => { 
-  switch (sortMethod) { 
-    case "strongest": 
-      // Sort by exchange rate - strongest first (highest rate) 
-      return [...rates].sort((a, b) => b.mid - a.mid); 
-    case "weakest": 
-      // Sort by exchange rate - weakest first (lowest rate) 
-      return [...rates].sort((a, b) => a.mid - b.mid); 
-    case "alphabetical": 
-      // Sort alphabetically by code 
-      return [...rates].sort((a, b) => a.code.localeCompare(b.code)); 
-    default: 
-      // Default sorting (as returned from API) 
-      return [...rates]; 
-  } 
-}; 
+const sortCurrencies = (
+  rates: CurrencyRate[],
+  sortMethod: SortMethods
+): CurrencyRate[] => {
+  switch (sortMethod) {
+    case "strongest":
+      // Sort by exchange rate - strongest first (highest rate)
+      return [...rates].sort((a, b) => b.mid - a.mid);
+    case "weakest":
+      // Sort by exchange rate - weakest first (lowest rate)
+      return [...rates].sort((a, b) => a.mid - b.mid);
+    case "alphabetical":
+      // Sort alphabetically by code
+      return [...rates].sort((a, b) => a.code.localeCompare(b.code));
+    default:
+      // Default sorting (as returned from API)
+      return [...rates];
+  }
+};
 
-const changeSort = (sortMethod: SortMethods): void => { 
-  currentSort.value = sortMethod; 
-  currentPage.value = 1; // Reset to first page when sorting changes 
-}; 
+const changeSort = (sortMethod: SortMethods): void => {
+  currentSort.value = sortMethod;
+  currentPage.value = 1; // Reset to first page when sorting changes
+};
 
-const prevPage = (): void => { 
-  if (currentPage.value > 1) { 
-    currentPage.value--; 
-  } 
-}; 
+const prevPage = (): void => {
+  if (currentPage.value > 1) {
+    currentPage.value--;
+  }
+};
 
-const nextPage = (): void => { 
-  if (currentPage.value < totalPages.value) { 
-    currentPage.value++; 
-  } 
-}; 
+const nextPage = (): void => {
+  if (currentPage.value < totalPages.value) {
+    currentPage.value++;
+  }
+};
 
-const goToPage = (pageNum: number): void => { 
-  currentPage.value = pageNum; 
-}; 
+const goToPage = (pageNum: number): void => {
+  currentPage.value = pageNum;
+};
 
-// Remove duplicates from combined tables 
-const removeDuplicates = (rates: CurrencyRate[]): CurrencyRate[] => { 
-  const uniqueRates: CurrencyRate[] = []; 
-  const seenCodes = new Set<string>(); 
-  rates.forEach((rate) => { 
-    if (!seenCodes.has(rate.code)) { 
-      seenCodes.add(rate.code); 
-      uniqueRates.push(rate); 
-    } 
-  }); 
-  return uniqueRates; 
-}; 
+// Remove duplicates from combined tables
+const removeDuplicates = (rates: CurrencyRate[]): CurrencyRate[] => {
+  const uniqueRates: CurrencyRate[] = [];
+  const seenCodes = new Set<string>();
+  rates.forEach((rate) => {
+    if (!seenCodes.has(rate.code)) {
+      seenCodes.add(rate.code);
+      uniqueRates.push(rate);
+    }
+  });
+  return uniqueRates;
+};
 
-// Fetch data on mount 
-onMounted(async () => { 
-  try { 
+// Fetch data on mount
+onMounted(async () => {
+  try {
     loading.value = true;
-    
+
     // Fetch all three tables (A, B, and C)
     const [tableAResponse, tableBResponse, tableCResponse] = await Promise.all([
       fetch("https://api.nbp.pl/api/exchangerates/tables/A/?format=json"),
       fetch("https://api.nbp.pl/api/exchangerates/tables/B/?format=json"),
-      fetch("https://api.nbp.pl/api/exchangerates/tables/C/?format=json")
+      fetch("https://api.nbp.pl/api/exchangerates/tables/C/?format=json"),
     ]);
-    
+
     const tableAData = await tableAResponse.json();
     const tableBData = await tableBResponse.json();
     const tableCData = await tableCResponse.json();
-    
+
     // Extract rates from each table
     const tableA = tableAData[0];
     const tableB = tableBData[0];
     const tableC = tableCData[0];
-    
+
     // Store table info for display
     tableInfos.value = [
       `Tabela A z dnia ${tableA.effectiveDate}`,
       `Tabela B z dnia ${tableB.effectiveDate}`,
-      `Tabela C z dnia ${tableC.effectiveDate}`
+      `Tabela C z dnia ${tableC.effectiveDate}`,
     ];
-    
+
     // For table C (which has bid/ask values), use the mid-point as the rate
     const tableCRates = tableC.rates.map((rate: any) => ({
       code: rate.code,
       currency: rate.currency,
-      mid: (rate.bid + rate.ask) / 2
+      mid: (rate.bid + rate.ask) / 2,
     }));
-    
+
     // Combine all rates and remove duplicates
-    const combinedRates = [
-      ...tableA.rates,
-      ...tableB.rates,
-      ...tableCRates
-    ];
-    
+    const combinedRates = [...tableA.rates, ...tableB.rates, ...tableCRates];
+
     const uniqueRates = removeDuplicates(combinedRates);
-    
+
     allRates.value = uniqueRates;
     displayRates.value = uniqueRates;
-    
+
     // Set date information with the latest date
-    const dates = [tableA.effectiveDate, tableB.effectiveDate, tableC.effectiveDate].sort();
+    const dates = [
+      tableA.effectiveDate,
+      tableB.effectiveDate,
+      tableC.effectiveDate,
+    ].sort();
     dateInfo.value = `Dane aktualne na dzień ${dates[dates.length - 1]} (połączone tabele A, B i C)`;
-    
-  } catch (error) { 
-    console.error("Błąd podczas pobierania danych:", error); 
+  } catch (error) {
+    console.error("Błąd podczas pobierania danych:", error);
     dateInfo.value = "Błąd podczas pobierania danych";
-  } finally { 
-    loading.value = false; 
-  } 
-}); 
+  } finally {
+    loading.value = false;
+  }
+});
 </script>
 <style scoped>
 :root {
-  --primary: #007b41;
-  --secondary: #1e1e1e;
-  --accent: #ffc107;
-  --text: #ffffff;
-  --border: #2e2e2e;
-  --dark: #005f2f;
-  --hover: #005f2f;
-  --background: #121212;
+  --ExchangeRates-primary: #007b41;
+  --ExchangeRates-secondary: #1e1e1e;
+  --ExchangeRates-accent: #ffc107;
+  --ExchangeRates-text: #ffffff;
+  --ExchangeRates-border: #2e2e2e;
+  --ExchangeRates-dark: #005f2f;
+  --ExchangeRates-hover: #005f2f;
+  --ExchangeRates-background: #121212;
 }
 
 .nbp-container {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   padding: 20px;
-  background-color: var(--background);
-  color: var(--text);
+  background-color: var(--ExchangeRates-background);
+  color: var(--ExchangeRates-text);
   min-height: 100vh;
 }
 
@@ -512,12 +592,12 @@ h1:after {
   transform: translateX(-50%);
   width: 120px;
   height: 3px;
-  background-color: var(--accent);
+  background-color: var(--ExchangeRates-accent);
   border-radius: 3px;
 }
 
 .container {
-  background-color: var(--secondary);
+  background-color: var(--ExchangeRates-secondary);
   border-radius: 12px;
   padding: 30px;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
