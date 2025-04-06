@@ -114,9 +114,11 @@ onMounted(() => {
   document.title = "Sudoku";
 
   // Listen for window resize events to update responsive behavior
-  window.addEventListener("resize", () => {
-    windowWidth.value = window.innerWidth;
-  });
+  window.addEventListener("resize", handleResize);
+});
+
+onUnmounted(() => {
+  window.removeEventListener("resize", handleResize);
 });
 </script>
 
