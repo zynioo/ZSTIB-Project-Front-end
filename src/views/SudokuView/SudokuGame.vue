@@ -890,7 +890,7 @@ onMounted(() => {
 });
 </script>
 
-<style >
+<style scoped>
 :root {
   --sudoku-primary: #007b41;
   --sudoku-primary-light: #009e52;
