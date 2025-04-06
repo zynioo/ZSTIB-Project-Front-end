@@ -890,20 +890,20 @@ onMounted(() => {
 });
 </script>
 
-<style scoped>
+<style >
 :root {
-  --primary: #007b41;
-  --primary-light: #009e52;
-  --primary-dark: #005730;
-  --secondary: #1e1e1e;
-  --accent: #ffc107;
-  --accent-dark: #e6ac00;
-  --text: #ffffff;
-  --border: #2e2e2e;
-  --dark: #005f2f;
-  --hover: #005f2f;
-  --background: #121212;
-  --card-bg: #1c1c1c;
+  --sudoku-primary: #007b41;
+  --sudoku-primary-light: #009e52;
+  --sudoku-primary-dark: #005730;
+  --sudoku-secondary: #1e1e1e;
+  --sudoku-accent: #ffc107;
+  --sudoku-accent-dark: #e6ac00;
+  --sudoku-text: #ffffff;
+  --sudoku-border: #2e2e2e;
+  --sudoku-dark: #005f2f;
+  --sudoku-hover: #005f2f;
+  --sudoku-background: #121212;
+  --sudoku-card-bg: #1c1c1c;
 }
 
 * {
@@ -921,7 +921,7 @@ onMounted(() => {
 .controls-container {
   width: 100%;
   margin-bottom: 20px;
-  background-color: var(--card-bg);
+  background-color: var(--sudoku-card-bg);
   border-radius: 8px;
   padding: 15px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -946,8 +946,8 @@ button {
   font-family: "Quicksand", sans-serif;
   font-weight: 600;
   padding: 12px 16px;
-  background-color: var(--primary);
-  color: var(--text);
+  background-color: var(--sudoku-primary);
+  color: var(--sudoku-text);
   border: none;
   border-radius: 6px;
   cursor: pointer;
@@ -960,7 +960,7 @@ button {
 }
 
 button:hover {
-  background-color: var(--primary-light);
+  background-color: var(--sudoku-primary-light);
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
@@ -978,20 +978,20 @@ button:disabled {
 }
 
 .difficulty button {
-  background-color: var(--secondary);
-  border: 1px solid var(--border);
+  background-color: var(--sudoku-secondary);
+  border: 1px solid var(--sudoku-border);
   flex: 1;
 }
 
 .difficulty button:hover {
-  background-color: var(--dark);
+  background-color: var(--sudoku-dark);
 }
 
 .difficulty button.active {
-  background-color: var(--primary);
-  color: var (--text);
+  background-color: var(--sudoku-primary);
+  color: var (--sudoku-text);
   font-weight: bold;
-  border: 1px solid var(--accent);
+  border: 1px solid var(--sudoku-accent);
   position: relative;
 }
 
@@ -1003,13 +1003,13 @@ button:disabled {
   transform: translateX(-50%);
   width: 8px;
   height: 8px;
-  background-color: var(--accent);
+  background-color: var(--sudoku-accent);
   border-radius: 50%;
 }
 
 /* Main game area */
 #sudoku-container {
-  border: 2px solid var(--border);
+  border: 2px solid var(--sudoku-border);
   margin-bottom: 20px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
   border-radius: 4px;
@@ -1029,31 +1029,31 @@ button:disabled {
   grid-template-columns: repeat(9, 50px);
   grid-template-rows: repeat(9, 50px);
   gap: 1px;
-  background-color: var(--border);
+  background-color: var(--sudoku-border);
 }
 
 .cell {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--secondary);
+  background-color: var(--sudoku-secondary);
   font-size: 20px;
   cursor: pointer;
-  color: var(--text);
+  color: var(--sudoku-text);
   transition:
     background-color 0.2s,
     transform 0.1s;
 }
 
 .cell:hover:not(.prefilled):not(.unavailable) {
-  background-color: var(--dark);
+  background-color: var(--sudoku-dark);
   transform: scale(1.05);
 }
 
 .prefilled {
   font-weight: bold;
-  background-color: var(--secondary);
-  color: var(--accent);
+  background-color: var(--sudoku-secondary);
+  color: var(--sudoku-accent);
   text-shadow: 0 0 5px rgba(255, 193, 7, 0.3);
 }
 
@@ -1062,16 +1062,16 @@ button:disabled {
 }
 
 .right-border {
-  border-right: 2px solid var(--primary);
+  border-right: 2px solid var(--sudoku-primary);
 }
 
 .bottom-border {
-  border-bottom: 2px solid var(--primary);
+  border-bottom: 2px solid var(--sudoku-primary);
 }
 
 .cell.selected {
-  background-color: var(--dark);
-  box-shadow: inset 0 0 0 2px var(--accent);
+  background-color: var(--sudoku-dark);
+  box-shadow: inset 0 0 0 2px var(--sudoku-accent);
   animation: pulse-selection 2s infinite;
 }
 
@@ -1117,15 +1117,15 @@ button:disabled {
 /* Correctly entered numbers */
 .cell.correct {
   font-weight: bold;
-  background-color: var(--secondary);
-  color: var(--accent);
+  background-color: var(--sudoku-secondary);
+  color: var(--sudoku-accent);
   animation: correct-number 0.5s;
 }
 
 /* Hint styling */
 .hint {
-  background-color: var(--accent);
-  color: var(--secondary);
+  background-color: var(--sudoku-accent);
+  color: var(--sudoku-secondary);
   animation: hint-glow 2s infinite;
 }
 
@@ -1154,9 +1154,9 @@ button:disabled {
 }
 
 .success {
-  background-color: var(--primary);
-  color: var(--text);
-  border-left: 4px solid var(--accent);
+  background-color: var(--sudoku-primary);
+  color: var(--sudoku-text);
+  border-left: 4px solid var(--sudoku-accent);
 }
 
 .error-message {
@@ -1171,7 +1171,7 @@ button:disabled {
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
   margin: 20px 0;
-  background-color: var(--card-bg);
+  background-color: var(--sudoku-card-bg);
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
@@ -1186,18 +1186,18 @@ button:disabled {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--primary);
+  background-color: var(--sudoku-primary);
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  color: var(--text);
+  color: var(--sudoku-text);
   transition: all 0.2s;
   margin: 0 auto;
   font-weight: bold;
 }
 
 .number-btn:hover {
-  background-color: var(--primary-light);
+  background-color: var(--sudoku-primary-light);
   transform: scale(1.08);
 }
 
@@ -1220,8 +1220,8 @@ button:disabled {
 
 /* Style for number buttons that have reached their limit */
 .number-btn.completed {
-  background-color: var(--accent);
-  color: var(--secondary);
+  background-color: var(--sudoku-accent);
+  color: var(--sudoku-secondary);
   box-shadow: 0 0 10px rgba(255, 193, 7, 0.5);
   cursor: not-allowed;
   position: relative;
@@ -1238,7 +1238,7 @@ button:disabled {
 
 .number-btn.completed:hover {
   transform: none;
-  background-color: var(--accent);
+  background-color: var(--sudoku-accent);
 }
 
 /* Confetti Animation */
@@ -1282,7 +1282,7 @@ button:disabled {
   display: none;
   animation: pop-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
   box-shadow: 0 5px 30px rgba(0, 0, 0, 0.5);
-  border: 2px solid var(--accent);
+  border: 2px solid var(--sudoku-accent);
 }
 
 /* Animations */
@@ -1300,13 +1300,13 @@ button:disabled {
 
 @keyframes pulse-selection {
   0% {
-    box-shadow: inset 0 0 0 2px var(--accent);
+    box-shadow: inset 0 0 0 2px var(--sudoku-accent);
   }
   50% {
-    box-shadow: inset 0 0 0 3px var(--accent-dark);
+    box-shadow: inset 0 0 0 3px var(--sudoku-accent-dark);
   }
   100% {
-    box-shadow: inset 0 0 0 2px var(--accent);
+    box-shadow: inset 0 0 0 2px var(--sudoku-accent);
   }
 }
 
@@ -1326,13 +1326,13 @@ button:disabled {
 
 @keyframes hint-glow {
   0% {
-    box-shadow: 0 0 5px var(--accent);
+    box-shadow: 0 0 5px var(--sudoku-accent);
   }
   50% {
-    box-shadow: 0 0 15px var(--accent);
+    box-shadow: 0 0 15px var(--sudoku-accent);
   }
   100% {
-    box-shadow: 0 0 5px var(--accent);
+    box-shadow: 0 0 5px var(--sudoku-accent);
   }
 }
 
