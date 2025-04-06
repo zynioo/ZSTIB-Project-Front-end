@@ -67,6 +67,11 @@ const works: Work[] = [
     imgSrc: "pytajnik.png",
     href: "/weatherApp",
   },
+  {
+    title: "Sudoku",
+    imgSrc: "pytajnik.png",
+    href: "/sudoku",
+  },
 ];
 </script>
 
