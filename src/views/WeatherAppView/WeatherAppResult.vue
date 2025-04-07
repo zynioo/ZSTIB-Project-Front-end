@@ -66,7 +66,7 @@ const translateCondition = (condition?: string) => {
   const translationMap: Record<string, string> = {
     Sunny: "Słonecznie",
     Clear: "Bezchmurnie",
-    "Partly Cloudy": "Częściowe zachmurzenie",
+    "Partly cloudy": "Częściowe zachmurzenie",
     Cloudy: "Pochmurno",
     Overcast: "Zachmurzenie całkowite",
     Mist: "Mgła",
