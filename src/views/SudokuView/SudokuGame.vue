@@ -1175,6 +1175,7 @@ button:disabled {
   padding: 15px;
   border-radius: 6px;
   text-align: center;
+  color: white;
   font-weight: 500;
   width: 100%;
   animation: fadeIn 0.5s;
