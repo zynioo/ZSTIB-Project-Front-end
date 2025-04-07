@@ -18,7 +18,7 @@
         <h2 class="weather-results-title" v-if="false">Wyniki</h2>
         <div class="weather-results-content">
           <WeatherAppResult
-            v-if="weatherHolder"
+            v-if="weatherHolder && !errorExsist"
             :cityName="city"
             :weather="weatherHolder"
           />

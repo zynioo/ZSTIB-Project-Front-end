@@ -128,6 +128,7 @@ const translateCondition = (condition?: string) => {
   font-size: 1.5rem;
   color: white;
   margin-bottom: 1.5rem;
+  max-width: 100%;
   text-align: center;
 }
 
