@@ -1,19 +1,20 @@
 <template>
-  <main class="game-area">
-    <div class="controls-container">
-      <div class="difficulty">
+  
+  <main class="sudoku-game-area">
+    <div class="sudoku-controls-container">
+      <div class="sudoku-difficulty">
         <button
           v-for="(label, level) in difficultyLevels"
           :key="level"
           :id="level"
-          :class="{ active: difficulty === level }"
+          :class="{ 'sudoku-active': difficulty === level }"
           @click="setDifficulty(level)"
         >
           <i :class="difficultyIcons[level]"></i> {{ label }}
         </button>
       </div>
 
-      <div class="controls">
+      <div class="sudoku-controls">
         <button id="new-game" @click="newGame">
           <i class="fas fa-sync-alt"></i> Nowa gra
         </button>
@@ -29,12 +30,12 @@
         </button>
         <button id="hint" @click="giveHint" :disabled="hintsRemaining <= 0">
           <i class="fas fa-lightbulb"></i> Podpowiedź
-          <span class="hint-counter">{{ hintsRemaining }}</span>
+          <span class="sudoku-hint-counter">{{ hintsRemaining }}</span>
         </button>
       </div>
     </div>
 
-    <div id="message" class="message" :class="messageType" v-show="showMessage">
+    <div id="message" class="sudoku-message" :class="messageType" v-show="showMessage">
       {{ message }}
     </div>
 
@@ -44,17 +45,17 @@
           <div
             v-for="(col, colIndex) in 9"
             :key="`${rowIndex}-${colIndex}`"
-            class="cell"
+            class="sudoku-cell"
             :class="{
-              'right-border': colIndex === 2 || colIndex === 5,
-              'bottom-border': rowIndex === 2 || rowIndex === 5,
-              prefilled: isPrefilled(rowIndex, colIndex),
-              error: hasError(rowIndex, colIndex),
-              selected: isSelected(rowIndex, colIndex),
-              conflicts: hasConflict(rowIndex, colIndex),
-              unavailable: isUnavailable(rowIndex, colIndex),
-              correct: isCorrect(rowIndex, colIndex),
-              hint: isHint(rowIndex, colIndex),
+              'sudoku-right-border': colIndex === 2 || colIndex === 5,
+              'sudoku-bottom-border': rowIndex === 2 || rowIndex === 5,
+              'sudoku-prefilled': isPrefilled(rowIndex, colIndex),
+              'sudoku-error': hasError(rowIndex, colIndex),
+              'sudoku-selected': isSelected(rowIndex, colIndex),
+              'sudoku-conflicts': hasConflict(rowIndex, colIndex),
+              'sudoku-unavailable': isUnavailable(rowIndex, colIndex),
+              'sudoku-correct': isCorrect(rowIndex, colIndex),
+              'sudoku-hint': isHint(rowIndex, colIndex),
             }"
             :data-row="rowIndex"
             :data-col="colIndex"
@@ -66,12 +67,12 @@
       </div>
     </div>
 
-    <div class="number-pad" id="number-pad">
+    <div class="sudoku-number-pad" id="number-pad">
       <button
         v-for="num in 9"
         :key="num"
-        class="number-btn"
-        :class="{ completed: isNumberCompleted(num) }"
+        class="sudoku-number-btn"
+        :class="{ 'sudoku-completed': isNumberCompleted(num) }"
         :data-value="num"
         @click="enterNumber(num)"
       >
@@ -79,28 +80,29 @@
       </button>
     </div>
 
-    <div class="controls">
+    <div class="sudoku-controls">
       <button id="clear-cell" @click="clearSelectedCell">
         <i class="fas fa-eraser"></i> Wyczyść komórkę
       </button>
     </div>
 
-    <div id="error-details" class="error-details" v-show="errorDetails">
+    <div id="error-details" class="sudoku-error-details" v-show="errorDetails">
       {{ errorDetails }}
     </div>
   </main>
 
   <!-- Confetti Container -->
   <div
-    class="confetti-container"
+    class="sudoku-confetti-container"
     id="confetti-container"
     ref="confettiContainer"
   ></div>
 
   <!-- Winner Message -->
-  <div class="winner-message" id="winner-message" v-show="showWinMessage">
+  <div class="sudoku-winner-message" id="winner-message" v-show="showWinMessage">
     Gratuluję! Rozwiązałeś sudoku poprawnie!
   </div>
+  
 </template>
 
 <script setup lang="ts">
@@ -250,15 +252,15 @@ const initializeGame = () => {
   for (let row = 0; row < 9; row++) {
     for (let col = 0; col < 9; col++) {
       const cell = document.createElement("div");
-      cell.className = "cell";
+      cell.className = "sudoku-cell";
       cell.dataset.row = row.toString();
       cell.dataset.col = col.toString();
 
       if (col === 2 || col === 5) {
-        cell.classList.add("right-border");
+        cell.classList.add("sudoku-right-border");
       }
       if (row === 2 || row === 5) {
-        cell.classList.add("bottom-border");
+        cell.classList.add("sudoku-bottom-border");
       }
 
       cell.addEventListener("click", () => selectCell(row, col));
@@ -512,10 +514,10 @@ const highlightNumberConstraints = (number: number) => {
       if (isUnavailable) {
         // Mark cell as unavailable
         const domCell = document.querySelector(
-          `.cell[data-row="${row}"][data-col="${col}"]`
+          `.sudoku-cell[data-row="${row}"][data-col="${col}"]`
         );
         if (domCell) {
-          domCell.classList.add("unavailable");
+          domCell.classList.add("sudoku-unavailable");
         }
       }
     }
@@ -523,8 +525,8 @@ const highlightNumberConstraints = (number: number) => {
 };
 
 const clearUnavailableHighlighting = () => {
-  document.querySelectorAll(".cell.unavailable").forEach((cell) => {
-    cell.classList.remove("unavailable");
+  document.querySelectorAll(".sudoku-cell.sudoku-unavailable").forEach((cell) => {
+    cell.classList.remove("sudoku-unavailable");
   });
 
   selectedNumber.value = null;
@@ -854,7 +856,7 @@ const showWinAnimation = () => {
 
   for (let i = 0; i < 200; i++) {
     const confetti = document.createElement("div");
-    confetti.className = "confetti";
+    confetti.className = "sudoku-confetti";
 
     // Random position, color, delay, and shape
     const left = Math.random() * 100 + "%";
@@ -870,7 +872,7 @@ const showWinAnimation = () => {
     confetti.style.borderRadius = shape;
     confetti.style.animationDelay = `${delay}s`;
 
-    confetti.classList.add("active");
+    confetti.classList.add("sudoku-active");
     confettiContainer.value.appendChild(confetti);
   }
 
@@ -889,59 +891,7 @@ onMounted(() => {
   newGame();
 });
 </script>
-
 <style scoped>
-:root {
-  --sudoku-primary: #007b41;
-  --sudoku-primary-light: #009e52;
-  --sudoku-primary-dark: #005730;
-  --sudoku-secondary: #1e1e1e;
-  --sudoku-accent: #ffc107;
-  --sudoku-accent-dark: #e6ac00;
-  --sudoku-text: #ffffff;
-  --sudoku-border: #2e2e2e;
-  --sudoku-dark: #005f2f;
-  --sudoku-hover: #005f2f;
-  --sudoku-background: #121212;
-  --sudoku-card-bg: #1c1c1c;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-.game-area {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-}
-
-/* Controls area */
-.controls-container {
-  width: 100%;
-  margin-bottom: 20px;
-  background-color: var(--sudoku-card-bg);
-  border-radius: 8px;
-  padding: 15px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.difficulty {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 15px;
-  justify-content: center;
-}
-
-.controls {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
 button {
   font-family: "Quicksand", sans-serif;
   font-weight: 600;
@@ -976,18 +926,96 @@ button:disabled {
   opacity: 0.5;
   transform: none;
 }
+@media (max-width: 600px) {
+  .sudoku-grid {
+    grid-template-columns: repeat(9, 35px);
+    grid-template-rows: repeat(9, 35px);
+  }
 
-.difficulty button {
+  .sudoku-cell {
+    font-size: 16px;
+  }
+
+  .sudoku-number-btn {
+    width: 45px;
+    height: 45px;
+    font-size: 20px;
+  }
+
+  .sudoku-controls {
+    flex-direction: column;
+  }
+
+  button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+</style>
+
+<style>
+:root {
+  --sudoku-primary: #007b41;
+  --sudoku-primary-light: #009e52;
+  --sudoku-primary-dark: #005730;
+  --sudoku-secondary: #1e1e1e;
+  --sudoku-accent: #ffc107;
+  --sudoku-accent-dark: #e6ac00;
+  --sudoku-text: #ffffff;
+  --sudoku-border: #2e2e2e;
+  --sudoku-dark: #005f2f;
+  --sudoku-hover: #005f2f;
+  --sudoku-background: #121212;
+  --sudoku-card-bg: #1c1c1c;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.sudoku-game-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+/* Controls area */
+.sudoku-controls-container {
+  width: 100%;
+  margin-bottom: 20px;
+  background-color: var(--sudoku-card-bg);
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.sudoku-difficulty {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+  justify-content: center;
+}
+
+.sudoku-controls {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.sudoku-difficulty button {
   background-color: var(--sudoku-secondary);
   border: 1px solid var(--sudoku-border);
   flex: 1;
 }
 
-.difficulty button:hover {
+.sudoku-difficulty button:hover {
   background-color: var(--sudoku-dark);
 }
 
-.difficulty button.active {
+.sudoku-difficulty button.sudoku-active {
   background-color: var(--sudoku-primary);
   color: var (--sudoku-text);
   font-weight: bold;
@@ -995,7 +1023,7 @@ button:disabled {
   position: relative;
 }
 
-.difficulty button.active::after {
+.sudoku-difficulty button.sudoku-active::after {
   content: "";
   position: absolute;
   bottom: -5px;
@@ -1032,7 +1060,7 @@ button:disabled {
   background-color: var(--sudoku-border);
 }
 
-.cell {
+.sudoku-cell {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1045,52 +1073,52 @@ button:disabled {
     transform 0.1s;
 }
 
-.cell:hover:not(.prefilled):not(.unavailable) {
+.sudoku-cell:hover:not(.sudoku-prefilled):not(.sudoku-unavailable) {
   background-color: var(--sudoku-dark);
   transform: scale(1.05);
 }
 
-.prefilled {
+.sudoku-prefilled {
   font-weight: bold;
   background-color: var(--sudoku-secondary);
   color: var(--sudoku-accent);
   text-shadow: 0 0 5px rgba(255, 193, 7, 0.3);
 }
 
-.error {
+.sudoku-error {
   background-color: rgba(255, 87, 87, 0.3);
 }
 
-.right-border {
+.sudoku-right-border {
   border-right: 2px solid var(--sudoku-primary);
 }
 
-.bottom-border {
+.sudoku-bottom-border {
   border-bottom: 2px solid var(--sudoku-primary);
 }
 
-.cell.selected {
+.sudoku-cell.sudoku-selected {
   background-color: var(--sudoku-dark);
   box-shadow: inset 0 0 0 2px var(--sudoku-accent);
   animation: pulse-selection 2s infinite;
 }
 
 /* Enhanced error styles */
-.cell.error {
+.sudoku-cell.sudoku-error {
   background-color: rgba(255, 87, 87, 0.3);
   animation: pulse-error 1s infinite;
 }
 
-.conflicts {
+.sudoku-conflicts {
   background-color: rgba(255, 87, 87, 0.15);
 }
 
-.subtle-error {
+.sudoku-subtle-error {
   border: 2px dashed rgba(255, 87, 87, 0.4);
   position: relative;
 }
 
-.subtle-error::after {
+.sudoku-subtle-error::after {
   content: "!";
   position: absolute;
   bottom: 2px;
@@ -1101,12 +1129,12 @@ button:disabled {
 }
 
 /* Enhanced constraint styling */
-.cell.unavailable {
+.sudoku-cell.sudoku-unavailable {
   position: relative;
   background-color: rgba(219, 68, 55, 0.15);
 }
 
-.cell.unavailable::before {
+.sudoku-cell.sudoku-unavailable::before {
   content: "✕";
   position: absolute;
   color: rgba(219, 68, 55, 0.4);
@@ -1115,7 +1143,7 @@ button:disabled {
 }
 
 /* Correctly entered numbers */
-.cell.correct {
+.sudoku-cell.sudoku-correct {
   font-weight: bold;
   background-color: var(--sudoku-secondary);
   color: var(--sudoku-accent);
@@ -1123,13 +1151,13 @@ button:disabled {
 }
 
 /* Hint styling */
-.hint {
+.sudoku-hint {
   background-color: var(--sudoku-accent);
   color: var(--sudoku-secondary);
   animation: hint-glow 2s infinite;
 }
 
-.hint-counter {
+.sudoku-hint-counter {
   background-color: rgba(255, 255, 255, 0.2);
   border-radius: 50%;
   width: 20px;
@@ -1142,7 +1170,7 @@ button:disabled {
 }
 
 /* Message display */
-.message {
+.sudoku-message {
   margin: 15px 0;
   padding: 15px;
   border-radius: 6px;
@@ -1153,20 +1181,20 @@ button:disabled {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
-.success {
+.sudoku-success {
   background-color: var(--sudoku-primary);
   color: var(--sudoku-text);
   border-left: 4px solid var(--sudoku-accent);
 }
 
-.error-message {
+.sudoku-error-message {
   background-color: rgba(255, 87, 87, 0.2);
   color: #ff5757;
   border-left: 4px solid #ff5757;
 }
 
 /* Number pad styles */
-.number-pad {
+.sudoku-number-pad {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
@@ -1179,7 +1207,7 @@ button:disabled {
   max-width: 250px;
 }
 
-.number-btn {
+.sudoku-number-btn {
   width: 60px;
   height: 60px;
   font-size: 26px;
@@ -1196,16 +1224,16 @@ button:disabled {
   font-weight: bold;
 }
 
-.number-btn:hover {
+.sudoku-number-btn:hover {
   background-color: var(--sudoku-primary-light);
   transform: scale(1.08);
 }
 
-.number-btn:active {
+.sudoku-number-btn:active {
   transform: scale(0.95);
 }
 
-.error-details {
+.sudoku-error-details {
   color: #ff5757;
   margin-top: 15px;
   font-weight: 500;
@@ -1219,7 +1247,7 @@ button:disabled {
 }
 
 /* Style for number buttons that have reached their limit */
-.number-btn.completed {
+.sudoku-number-btn.sudoku-completed {
   background-color: var(--sudoku-accent);
   color: var(--sudoku-secondary);
   box-shadow: 0 0 10px rgba(255, 193, 7, 0.5);
@@ -1227,7 +1255,7 @@ button:disabled {
   position: relative;
 }
 
-.number-btn.completed::after {
+.sudoku-number-btn.sudoku-completed::after {
   content: "✓";
   position: absolute;
   top: 5px;
@@ -1236,13 +1264,13 @@ button:disabled {
   font-weight: bold;
 }
 
-.number-btn.completed:hover {
+.sudoku-number-btn.sudoku-completed:hover {
   transform: none;
   background-color: var(--sudoku-accent);
 }
 
 /* Confetti Animation */
-.confetti-container {
+.sudoku-confetti-container {
   position: fixed;
   top: 0;
   left: 0;
@@ -1254,7 +1282,7 @@ button:disabled {
   display: none;
 }
 
-.confetti {
+.sudoku-confetti {
   position: absolute;
   width: 10px;
   height: 10px;
@@ -1262,11 +1290,11 @@ button:disabled {
   opacity: 0;
 }
 
-.confetti.active {
+.sudoku-confetti.sudoku-active {
   animation: confetti-fall 4s ease-out forwards;
 }
 
-.winner-message {
+.sudoku-winner-message {
   position: fixed;
   top: 40%;
   left: 50%;
@@ -1370,31 +1398,6 @@ button:disabled {
 }
 
 /* Responsive adjustments */
-@media (max-width: 600px) {
-  .sudoku-grid {
-    grid-template-columns: repeat(9, 35px);
-    grid-template-rows: repeat(9, 35px);
-  }
-
-  .cell {
-    font-size: 16px;
-  }
-
-  .number-btn {
-    width: 45px;
-    height: 45px;
-    font-size: 20px;
-  }
-
-  .controls {
-    flex-direction: column;
-  }
-
-  button {
-    width: 100%;
-    justify-content: center;
-  }
-}
 
 @media (max-width: 400px) {
   .sudoku-grid {
@@ -1402,11 +1405,11 @@ button:disabled {
     grid-template-rows: repeat(9, 30px);
   }
 
-  .cell {
+  .sudoku-cell {
     font-size: 14px;
   }
 
-  .number-btn {
+  .sudoku-number-btn {
     width: 40px;
     height: 40px;
   }

@@ -1,5 +1,5 @@
 <template>
-  <div class="sudoku-view" v-if="windowWidth > 375">
+  <div class="sudoku-view" v-if="windowWidth > 330">
     <div class="container col-xxl-10">
       <HeaderOfGame>
         <template #header>
@@ -104,16 +104,19 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, onUnmounted, onMounted } from "vue";
 import HeaderOfGame from "../../components/HeaderOfGame.vue";
 import SudokuGame from "./SudokuGame.vue";
 
 const windowWidth = ref(window.innerWidth);
 
+function handleResize() {
+  windowWidth.value = window.innerWidth;
+}
+
 onMounted(() => {
   document.title = "Sudoku";
 
-  // Listen for window resize events to update responsive behavior
   window.addEventListener("resize", handleResize);
 });
 
