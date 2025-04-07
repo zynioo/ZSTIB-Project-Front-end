@@ -59,17 +59,17 @@ const works: Work[] = [
   },
   {
     title: "Kursy walut",
-    imgSrc: "pytajnik.png",
+    imgSrc: "ExchangeRatesPreview.png",
     href: "/exchangeRates",
   },
   {
     title: "Pogoda",
-    imgSrc: "pytajnik.png",
+    imgSrc: "WeatherPreview.png",
     href: "/weatherApp",
   },
   {
     title: "Sudoku",
-    imgSrc: "pytajnik.png",
+    imgSrc: "SudokuPreview.png",
     href: "/sudoku",
   },
 ];
