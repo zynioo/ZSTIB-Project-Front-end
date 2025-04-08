@@ -1,5 +1,4 @@
 <template>
-  <!-- <div class="recipes-background"></div> -->
   <div class="recipes-container">
     <div class="recipes-header">
       <HeaderOfGame>
@@ -13,7 +12,7 @@
           <p>
             Wyszukaj przepis na danie, które chcesz przygotować. Możesz
             <br />
-            przeszukiwać przepisy według kategorii, składników lub nazwy dania.
+            wyszukiwać przepisy według kategorii, składników, nazwy dania lub wybranej kuchni.
           </p>
         </template>
       </HeaderOfGame>

@@ -1,32 +1,40 @@
 <template>
   <div class="meal-card" @click="viewRecipe">
-    <img :src="meal.strMealThumb" :alt="meal.strMeal" class="meal-image" />
+    <div class="meal-image">
+      <img :src="meal.strMealThumb" :alt="meal.strMeal" />
+    </div>
     <div class="meal-info">
-      <div class="recipe-title-row">
-        <h3>{{ meal.strMeal }}</h3>
-        <button
-          class="favorite-btn"
-          @click.stop="toggleFavorite"
-          :class="{ active: isFavorite }"
-        >
-          <i class="fa-heart" :class="isFavorite ? 'fas' : 'far'"></i>
+      <div class="meal-content">
+        <div class="recipe-title-row">
+          <h3>{{ meal.strMeal }}</h3>
+          <button
+            class="favorite-btn"
+            @click.stop="toggleFavorite"
+            :class="{ active: isFavorite }"
+          >
+            <i class="fa-heart" :class="isFavorite ? 'fas' : 'far'"></i>
+          </button>
+        </div>
+        <div class="meal-details">
+          <p class="meal-category">
+            Kategoria: {{ meal.strCategory || "Nieznana" }}
+          </p>
+          <p class="meal-area">
+            Kuchnia: {{ meal.strArea || "Nieznana" }}
+            <img
+              v-if="meal.strArea && getCountryCode(meal.strArea)"
+              :src="getCountryFlag(meal.strArea)"
+              :alt="meal.strArea"
+              class="small-flag"
+            />
+          </p>
+        </div>
+      </div>
+      <div class="button-container">
+        <button class="view-recipe-btn" @click="viewRecipe">
+          Zobacz Przepis
         </button>
       </div>
-      <p class="meal-category">
-        Kategoria: {{ meal.strCategory || "Nieznana" }}
-      </p>
-      <p class="meal-area">
-        Kuchnia: {{ meal.strArea || "Nieznana" }}
-        <img
-          v-if="meal.strArea && getCountryCode(meal.strArea)"
-          :src="getCountryFlag(meal.strArea)"
-          :alt="meal.strArea"
-          class="small-flag"
-        />
-      </p>
-      <button class="view-recipe-btn" @click="viewRecipe">
-        Zobacz Przepis
-      </button>
     </div>
   </div>
 </template>
@@ -43,10 +51,8 @@ const props = defineProps({
 
 const emit = defineEmits(["view-details", "toggle-favorite"]);
 
-// Lokalne ref zamiast computed
 const isFavorite = ref(false);
 
-// Funkcja do sprawdzania czy przepis jest w ulubionych
 const checkFavoriteStatus = () => {
   try {
     const favorites = JSON.parse(localStorage.getItem("favoriteMeals") || "[]");
@@ -59,45 +65,38 @@ const checkFavoriteStatus = () => {
   }
 };
 
-// Funkcja do obsługi zdarzenia zmiany ulubionych
 const handleFavoritesChange = () => {
   checkFavoriteStatus();
 };
 
-// Sprawdzamy status przy montowaniu i ustawiamy nasłuchiwanie na zdarzenie
 onMounted(() => {
   checkFavoriteStatus();
   window.addEventListener("storage", handleFavoritesChange);
   window.addEventListener("favoritesUpdated", handleFavoritesChange);
 });
 
-// Czyścimy nasłuchiwanie przy odmontowaniu
 onUnmounted(() => {
   window.removeEventListener("storage", handleFavoritesChange);
   window.removeEventListener("favoritesUpdated", handleFavoritesChange);
 });
 
-// Obserwujemy zmiany we właściwości meal
 watch(
   () => props.meal?.idMeal,
   async () => {
     checkFavoriteStatus();
 
-    // Sprawdź czy brakuje danych o kategorii lub kuchni
     if (
       props.meal &&
       props.meal.idMeal &&
       (!props.meal.strCategory || !props.meal.strArea)
     ) {
       try {
-        // Pobierz pełne dane o posiłku, jeśli brakuje informacji
         const response = await fetch(
           `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${props.meal.idMeal}`
         );
         const data = await response.json();
 
         if (data.meals && data.meals[0]) {
-          // Uzupełnij brakujące dane
           if (!props.meal.strCategory)
             props.meal.strCategory = data.meals[0].strCategory;
           if (!props.meal.strArea) props.meal.strArea = data.meals[0].strArea;
@@ -118,18 +117,15 @@ const toggleFavorite = (event) => {
   event.stopPropagation();
 
   try {
-    // Pobieramy aktualne ulubione z localStorage
     const favorites = JSON.parse(localStorage.getItem("favoriteMeals") || "[]");
     const existingIndex = favorites.findIndex(
       (fav) => fav.idMeal === props.meal.idMeal
     );
 
-    // Aktualizujemy ulubione
     if (existingIndex >= 0) {
       favorites.splice(existingIndex, 1);
       isFavorite.value = false;
     } else {
-      // Zapisujemy tylko podstawowe informacje
       const mealToSave = {
         idMeal: props.meal.idMeal,
         strMeal: props.meal.strMeal,
@@ -141,20 +137,16 @@ const toggleFavorite = (event) => {
       isFavorite.value = true;
     }
 
-    // Zapisujemy do localStorage
     localStorage.setItem("favoriteMeals", JSON.stringify(favorites));
 
-    // Emitujemy proste zdarzenie
     window.dispatchEvent(new Event("favoritesUpdated"));
 
-    // Informujemy rodzica o zmianie
     emit("toggle-favorite", props.meal);
   } catch (error) {
     console.error("Error toggling favorite:", error);
   }
 };
 
-// Mapa mapująca nazwy kuchni z TheMealDB na kody krajów ISO
 const cuisineToCountryCode = {
   American: "us",
   British: "gb",
@@ -185,12 +177,10 @@ const cuisineToCountryCode = {
   Vietnamese: "vn",
 };
 
-// Funkcja do pobierania kodu kraju dla danej kuchni
 const getCountryCode = (cuisine) => {
   return cuisineToCountryCode[cuisine];
 };
 
-// Funkcja do pobierania flagi dla danej kuchni
 const getCountryFlag = (cuisine) => {
   const countryCode = cuisineToCountryCode[cuisine] || "un";
   return `https://flagcdn.com/${countryCode}.svg`;
@@ -198,28 +188,21 @@ const getCountryFlag = (cuisine) => {
 </script>
 
 <style scoped>
-:root {
-  --primary: #86be42;
-  --primaryHover: #6f9e3f;
-  --white: #ffffff;
-  --lightGray: #d1d5db;
-  --gray: #808080;
-  --deepGray: #0a0a0f;
-  --lightDark: #313131;
-  --dark: #101017;
-  --deepDark: #050507;
-  --lose: #ff0000;
-}
-
 .meal-card {
   position: relative;
   background-color: var(--deepGray);
-  border-radius: 12px;
+  border-radius: 15px;
   overflow: hidden;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   transform: translateY(0);
   border: 1px solid transparent;
+  min-height: 420px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-sizing: border-box; /* Gwarantuje, że padding i border są wliczane w szerokość */
+  width: 100%; /* Pełna szerokość kontenera */
 }
 
 .meal-card::before {
@@ -248,14 +231,24 @@ const getCountryFlag = (cuisine) => {
 
 .meal-image {
   width: 100%;
-  height: 200px;
+  height: 0;
+  padding-top: 66.67%; /* Proporcja 3:2 */
+  position: relative;
+  overflow: hidden;
+}
+
+.meal-image img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   transition: all 0.5s;
-  position: relative;
   z-index: 1;
 }
 
-.meal-card:hover .meal-image {
+.meal-card:hover .meal-image img {
   transform: scale(1.1);
   filter: brightness(1.1) contrast(1.1);
 }
@@ -265,6 +258,31 @@ const getCountryFlag = (cuisine) => {
   position: relative;
   z-index: 2;
   background-color: var(--deepGray);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.meal-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.button-container {
+  width: 100%;
+  margin-top: auto;
+}
+
+.recipe-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 10px;
 }
 
 .meal-info h3 {
@@ -273,8 +291,18 @@ const getCountryFlag = (cuisine) => {
   color: var(--white);
   font-size: 18px;
   position: relative;
-  display: inline-block;
   transition: all 0.3s;
+  line-height: 1.4;
+  max-height: 50px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  flex: 1;
+  padding-right: 10px;
+  width: calc(100% - 30px); /* Odjęcie miejsca na ikonę serca */
+  box-sizing: border-box;
 }
 
 .meal-info h3::after {
@@ -294,13 +322,6 @@ const getCountryFlag = (cuisine) => {
 
 .meal-card:hover h3::after {
   width: 100%;
-}
-
-.recipe-title-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 10px;
 }
 
 .favorite-btn {
@@ -348,6 +369,14 @@ const getCountryFlag = (cuisine) => {
   filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.3));
 }
 
+.meal-details {
+  flex: 1;
+  min-height: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
 .meal-info p {
   color: var(--lightGray);
   margin: 8px 0;
@@ -386,7 +415,6 @@ const getCountryFlag = (cuisine) => {
   padding: 12px 20px;
   border-radius: 8px;
   cursor: pointer;
-  margin-top: 15px;
   width: 100%;
   font-weight: bold;
   transition: all 0.3s;
@@ -395,6 +423,11 @@ const getCountryFlag = (cuisine) => {
   text-transform: uppercase;
   letter-spacing: 1px;
   font-size: 13px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .view-recipe-btn::before {
@@ -422,10 +455,81 @@ const getCountryFlag = (cuisine) => {
   box-shadow: 0 5px 15px rgba(134, 190, 66, 0.3);
 }
 
+/* Media queries dla responsywności */
+@media (max-width: 1200px) {
+  .meal-card {
+    min-height: 400px;
+  }
+}
+
+@media (max-width: 992px) {
+  .meal-card {
+    min-height: 380px;
+  }
+}
+
 @media (max-width: 768px) {
   .meal-card {
-    max-width: 350px;
+    min-height: 420px;
+    max-width: 400px;
     margin: 0 auto;
+  }
+
+  .meal-info {
+    padding: 15px;
+  }
+
+  .meal-content {
+    margin-bottom: 10px;
+  }
+}
+
+@media (max-width: 576px) {
+  .meal-card {
+    min-height: 380px;
+    max-width: 100%;
+  }
+
+  .meal-info {
+    padding: 12px;
+  }
+
+  .meal-info h3 {
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+
+  .meal-info p {
+    font-size: 13px;
+    margin: 6px 0;
+  }
+
+  .meal-details {
+    min-height: 50px;
+  }
+
+  .button-container {
+    margin-top: 10px;
+  }
+
+  .view-recipe-btn {
+    height: 40px;
+    font-size: 12px;
+    padding: 10px 15px;
+  }
+}
+
+@media (max-width: 375px) {
+  .meal-card {
+    min-height: 360px;
+  }
+
+  .meal-info {
+    padding: 10px;
+  }
+
+  .favorite-btn i {
+    font-size: 18px;
   }
 }
 </style>

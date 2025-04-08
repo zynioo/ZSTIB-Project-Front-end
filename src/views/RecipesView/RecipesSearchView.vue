@@ -89,14 +89,8 @@ const areas = ref([]);
 
 const emit = defineEmits(["view-meal"]);
 
-// Funkcja do obsługi zdarzenia zmiany ulubionych
 const handleFavoritesChange = () => {
-  // Zamiast przeładowywać całą listę, po prostu aktualizujemy referencję
-  // zmuszając Vue do odświeżenia tylko tego co potrzebne
   if (meals.value && meals.value.length > 0) {
-    // Używamy Object.assign, aby nie wymuszać pełnego re-renderowania
-    // ale tylko zaktualizować referencje do obiektów, co spowoduje
-    // że Vue zaktualizuje tylko zmiany
     meals.value = [...meals.value];
   }
 };
@@ -104,12 +98,10 @@ const handleFavoritesChange = () => {
 onMounted(async () => {
   await fetchCategories();
   await fetchAreas();
-  // Dodajemy nasłuchiwanie na zdarzenie favoritesUpdated
   window.addEventListener("favoritesUpdated", handleFavoritesChange);
 });
 
 onUnmounted(() => {
-  // Usuwamy nasłuchiwanie przy odmontowaniu
   window.removeEventListener("favoritesUpdated", handleFavoritesChange);
 });
 
@@ -160,13 +152,10 @@ const searchMeals = async () => {
     const data = await response.json();
 
     if (data.meals) {
-      // Dla wyszukiwania po nazwie otrzymujemy pełne dane
       if (searchType.value === "name") {
         meals.value = data.meals;
       }
-      // Przy filtrowaniu dostajemy tylko podstawowe informacje, więc dodajemy brakujące
       else {
-        // Dodajemy informacje o kategorii lub kuchni, jeśli filtrujemy po nich
         const mealsWithInfo = data.meals.map((meal) => {
           if (searchType.value === "category") {
             meal.strCategory = searchQuery.value;
@@ -216,15 +205,11 @@ const viewMealDetails = async (mealId: string) => {
 
 const toggleFavorite = (meal: any) => {
   try {
-    // Ta funkcja jest już obsługiwana w komponencie MealView
-    // Tutaj tylko odbieramy zdarzenie, ale nie musimy nic robić
-    // Zdarzenie favoritesUpdated zajmie się odświeżeniem widoku
   } catch (error) {
     console.error("Error handling toggle favorite:", error);
   }
 };
 
-// Mapa mapująca nazwy kuchni z TheMealDB na kody krajów ISO
 const cuisineToCountryCode = {
   American: "us",
   British: "gb",
@@ -253,10 +238,9 @@ const cuisineToCountryCode = {
   Tunisian: "tn",
   Turkish: "tr",
   Vietnamese: "vn",
-  Unknown: "un", // Domyślna wartość dla nieznanych kuchni
+  Unknown: "un", 
 };
 
-// Funkcja do pobierania flagi dla danej kuchni
 const getCountryFlag = (cuisine) => {
   const countryCode = cuisineToCountryCode[cuisine] || "un";
   return `https://flagcdn.com/${countryCode}.svg`;
@@ -264,19 +248,6 @@ const getCountryFlag = (cuisine) => {
 </script>
 
 <style scoped>
-:root {
-  --primary: #86be42;
-  --primaryHover: #6f9e3f;
-  --white: #ffffff;
-  --lightGray: #d1d5db;
-  --gray: #808080;
-  --deepGray: #0a0a0f;
-  --lightDark: #313131;
-  --dark: #101017;
-  --deepDark: #050507;
-  --lose: #ff0000;
-}
-
 .search-container {
   display: flex;
   flex-direction: column;
@@ -597,27 +568,19 @@ const getCountryFlag = (cuisine) => {
   margin-top: 5px;
 }
 
-/* Siatka dań */
 .meals-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 25px;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 30px;
   margin-top: 30px;
   animation: fadeInUp 0.5s ease-out;
 }
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.meals-grid > * {
+  width: 100%;
+  box-sizing: border-box;
 }
 
-/* Stany ładowania i brak wyników */
 .loading,
 .no-results {
   display: flex;
@@ -653,6 +616,82 @@ const getCountryFlag = (cuisine) => {
   max-width: 500px;
   margin: 0 auto;
   line-height: 1.6;
+}
+
+/* Responsywne style */
+@media screen and (max-width: 1200px) {
+  .meals-grid {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .meals-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+
+  .search-input {
+    flex-wrap: wrap;
+  }
+
+  .search-input input {
+    min-width: 200px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .search-input {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .search-input input,
+  .search-input select,
+  .search-button {
+    width: 100%;
+  }
+
+  .categories-container,
+  .areas-container {
+    padding: 15px;
+  }
+
+  .categories,
+  .areas {
+    padding-bottom: 15px; /* Dodatkowy padding na dole dla wygodniejszego przewijania */
+  }
+
+  .category-item,
+  .area-item {
+    min-width: 110px;
+  }
+
+  .meals-grid {
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .meals-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .search-box {
+    padding: 15px;
+  }
+
+  .area-icon,
+  .category-item img {
+    width: 60px;
+    height: 60px;
+  }
+
+  .search-input input {
+    padding: 12px 15px;
+  }
 }
 
 @media (max-width: 768px) {

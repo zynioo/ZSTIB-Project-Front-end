@@ -31,7 +31,6 @@ import MealView from "./MealView.vue";
 const favorites = ref([]);
 const emit = defineEmits(["view-meal"]);
 
-// Funkcja do ładowania ulubionych
 const loadFavorites = () => {
   try {
     const savedFavorites = localStorage.getItem("favoriteMeals");
@@ -46,9 +45,7 @@ const loadFavorites = () => {
   }
 };
 
-// UPROSZCZONA funkcja obsługi zdarzenia favoritesUpdated
 const handleFavoritesChange = () => {
-  // Po prostu przeładuj całą listę ulubionych z localStorage
   loadFavorites();
 };
 
@@ -77,10 +74,8 @@ const viewMealDetails = async (mealId: string) => {
   }
 };
 
-// UPROSZCZONA funkcja toggleFavorite
 const toggleFavorite = (meal: any) => {
   try {
-    // 1. Usuń posiłek z localStorage
     const storedFavorites = JSON.parse(
       localStorage.getItem("favoriteMeals") || "[]"
     );
@@ -89,12 +84,10 @@ const toggleFavorite = (meal: any) => {
     );
     localStorage.setItem("favoriteMeals", JSON.stringify(newStoredFavorites));
 
-    // 2. Usuń posiłek z lokalnej tablicy w komponencie
     favorites.value = favorites.value.filter(
       (item) => item.idMeal !== meal.idMeal
     );
 
-    // 3. Emituj zdarzenie
     window.dispatchEvent(new Event("favoritesUpdated"));
   } catch (error) {
     console.error("Error removing favorite:", error);
@@ -103,19 +96,6 @@ const toggleFavorite = (meal: any) => {
 </script>
 
 <style scoped>
-:root {
-  --primary: #86be42;
-  --primaryHover: #6f9e3f;
-  --white: #ffffff;
-  --lightGray: #d1d5db;
-  --gray: #808080;
-  --deepGray: #0a0a0f;
-  --lightDark: #313131;
-  --dark: #101017;
-  --deepDark: #050507;
-  --lose: #ff0000;
-}
-
 .favorites-container {
   padding: 20px 0;
 }
@@ -148,9 +128,15 @@ const toggleFavorite = (meal: any) => {
 
 .meals-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 25px;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 30px;
   animation: fadeInUp 0.6s ease-out;
+}
+
+/* Dodanie stylu dla bezpośrednich dzieci siatki */
+.meals-grid > * {
+  width: 100%;
+  box-sizing: border-box;
 }
 
 @keyframes fadeInUp {
@@ -161,6 +147,58 @@ const toggleFavorite = (meal: any) => {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* Dodatkowe media queries dla responsywności */
+@media (max-width: 1200px) {
+  .meals-grid {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+  }
+}
+
+@media (max-width: 992px) {
+  .meals-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .favorites-content h2 {
+    font-size: 24px;
+  }
+
+  .meals-grid {
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  }
+
+  .no-favorites {
+    padding: 60px 20px;
+  }
+
+  .empty-heart {
+    font-size: 60px;
+  }
+}
+
+@media (max-width: 576px) {
+  .meals-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .no-favorites {
+    padding: 40px 15px;
+  }
+
+  .no-favorites h3 {
+    font-size: 22px;
+  }
+
+  .no-favorites p {
+    font-size: 14px;
   }
 }
 
@@ -248,19 +286,5 @@ const toggleFavorite = (meal: any) => {
   z-index: 1;
   line-height: 1.6;
   font-size: 16px;
-}
-
-@media (max-width: 768px) {
-  .favorites-content h2 {
-    font-size: 24px;
-  }
-
-  .no-favorites {
-    padding: 60px 20px;
-  }
-
-  .empty-heart {
-    font-size: 60px;
-  }
 }
 </style>

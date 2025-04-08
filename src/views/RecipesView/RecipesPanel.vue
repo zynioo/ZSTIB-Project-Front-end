@@ -40,7 +40,6 @@ import RecipesSearchView from "./RecipesSearchView.vue";
 import RecipesFavouritesView from "./RecipesFavouritesView.vue";
 import MealDescriptionView from "./MealDescriptionView.vue";
 
-// Load Font Awesome
 const loadFontAwesome = () => {
   const link = document.createElement("link");
   link.rel = "stylesheet";
@@ -64,10 +63,8 @@ const viewMeal = (meal: any) => {
   selectedMeal.value = meal;
 };
 
-// Compute the count of favorite meals
 const favoritesCount = ref(0);
 
-// Funkcja do aktualizacji licznika ulubionych
 const updateFavoritesCount = () => {
   try {
     const favorites = JSON.parse(localStorage.getItem("favoriteMeals") || "[]");
@@ -78,7 +75,6 @@ const updateFavoritesCount = () => {
   }
 };
 
-// Funkcja obsługująca zdarzenie zmiany ulubionych
 const handleFavoritesChange = () => {
   updateFavoritesCount();
 };
@@ -87,7 +83,6 @@ onMounted(() => {
   loadFontAwesome();
   updateFavoritesCount();
 
-  // Nasłuchujemy na zmiany w ulubionych
   window.addEventListener("storage", handleFavoritesChange);
   window.addEventListener("favoritesUpdated", handleFavoritesChange);
 });
@@ -99,19 +94,6 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-:root {
-  --primary: #86be42; /*Aktualnie jak na stronie zstib    #079211,    #02a30d*/
-  --primaryHover: #6f9e3f;
-  --white: #ffffff;
-  --lightGray: #d1d5db;
-  --gray: #808080;
-  --deepGray: #0a0a0f;
-  --lightDark: #313131;
-  --dark: #101017;
-  --deepDark: #050507;
-  --lose: #ff0000;
-}
-
 .recipes-container {
   width: 100%;
   margin: 0 auto;
@@ -239,6 +221,17 @@ onUnmounted(() => {
   transition: all 0.3s ease-in-out;
 }
 
+/* Ulepszone media queries dla lepszej responsywności */
+@media (max-width: 992px) {
+  .recipes-container {
+    padding: 15px;
+  }
+
+  .content {
+    padding: 20px;
+  }
+}
+
 @media (max-width: 768px) {
   .view-btn {
     padding: 12px 15px;
@@ -251,6 +244,40 @@ onUnmounted(() => {
 
   .content {
     padding: 15px;
+  }
+}
+
+@media (max-width: 576px) {
+  .recipes-container {
+    padding: 10px;
+    border-radius: 10px;
+  }
+
+  .view-controls {
+    border-radius: 5px 5px 0 0;
+  }
+
+  .view-btn {
+    padding: 10px;
+    font-size: 13px;
+    letter-spacing: 0;
+  }
+
+  .view-btn i {
+    font-size: 12px;
+    margin-right: 3px;
+  }
+
+  .fav-count {
+    width: 20px;
+    height: 20px;
+    font-size: 10px;
+    margin-left: 5px;
+  }
+
+  .content {
+    padding: 10px;
+    border-radius: 0 0 5px 5px;
   }
 }
 </style>

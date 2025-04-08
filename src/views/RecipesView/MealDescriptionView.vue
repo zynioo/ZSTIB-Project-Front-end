@@ -87,10 +87,8 @@ const props = defineProps({
 
 const emit = defineEmits(["close"]);
 
-// Lokalne ref zamiast computed
 const isFavorite = ref(false);
 
-// Funkcja do sprawdzania czy przepis jest w ulubionych
 const checkFavoriteStatus = () => {
   try {
     const favorites = JSON.parse(localStorage.getItem("favoriteMeals") || "[]");
@@ -103,25 +101,21 @@ const checkFavoriteStatus = () => {
   }
 };
 
-// Funkcja do obsługi zdarzenia zmiany ulubionych
 const handleFavoritesChange = () => {
   checkFavoriteStatus();
 };
 
-// Sprawdzamy status przy montowaniu i ustawiamy nasłuchiwanie na zdarzenie
 onMounted(() => {
   checkFavoriteStatus();
   window.addEventListener("storage", handleFavoritesChange);
   window.addEventListener("favoritesUpdated", handleFavoritesChange);
 });
 
-// Czyścimy nasłuchiwanie przy odmontowaniu
 onUnmounted(() => {
   window.removeEventListener("storage", handleFavoritesChange);
   window.removeEventListener("favoritesUpdated", handleFavoritesChange);
 });
 
-// Obserwujemy zmiany we właściwości meal
 watch(
   () => props.meal?.idMeal,
   () => {
@@ -181,18 +175,15 @@ const getYoutubeEmbedUrl = (url: string) => {
 
 const toggleFavorite = () => {
   try {
-    // Pobieramy aktualne ulubione z localStorage
     const favorites = JSON.parse(localStorage.getItem("favoriteMeals") || "[]");
     const existingIndex = favorites.findIndex(
       (fav) => fav.idMeal === props.meal.idMeal
     );
 
-    // Aktualizujemy ulubione
     if (existingIndex >= 0) {
       favorites.splice(existingIndex, 1);
       isFavorite.value = false;
     } else {
-      // Zapisujemy tylko podstawowe informacje
       const mealToSave = {
         idMeal: props.meal.idMeal,
         strMeal: props.meal.strMeal,
@@ -204,10 +195,8 @@ const toggleFavorite = () => {
       isFavorite.value = true;
     }
 
-    // Zapisujemy do localStorage
     localStorage.setItem("favoriteMeals", JSON.stringify(favorites));
 
-    // Emitujemy proste zdarzenie
     window.dispatchEvent(new Event("favoritesUpdated"));
   } catch (error) {
     console.error("Error toggling favorite:", error);
@@ -216,19 +205,6 @@ const toggleFavorite = () => {
 </script>
 
 <style scoped>
-:root {
-  --primary: #86be42;
-  --primaryHover: #6f9e3f;
-  --white: #ffffff;
-  --lightGray: #d1d5db;
-  --gray: #808080;
-  --deepGray: #0a0a0f;
-  --lightDark: #313131;
-  --dark: #101017;
-  --deepDark: #050507;
-  --lose: #ff0000;
-}
-
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -636,7 +612,33 @@ const toggleFavorite = () => {
   box-shadow: 0 15px 25px rgba(134, 190, 66, 0.5);
 }
 
+@media (max-width: 992px) {
+  .modal-content {
+    width: 95%;
+    padding: 25px;
+  }
+
+  .meal-image {
+    width: 220px;
+    height: 220px;
+  }
+
+  .meal-title h2 {
+    font-size: 26px;
+  }
+
+  .ingredients-section,
+  .instructions-section {
+    padding: 20px;
+  }
+}
+
 @media (max-width: 768px) {
+  .modal-content {
+    padding: 20px;
+    width: 100%;
+  }
+
   .meal-header {
     flex-direction: column;
     align-items: center;
@@ -644,9 +646,18 @@ const toggleFavorite = () => {
   }
 
   .meal-image {
-    width: 100%;
-    height: auto;
-    max-width: 300px;
+    width: 200px;
+    height: 200px;
+    margin-bottom: 15px;
+  }
+
+  .meal-title {
+    align-items: center;
+  }
+
+  .meal-title h2 {
+    font-size: 24px;
+    text-align: center;
   }
 
   .meal-title h2::after,
@@ -657,12 +668,63 @@ const toggleFavorite = () => {
     transform: translateX(-50%);
   }
 
-  .meal-details {
-    grid-template-columns: 1fr;
+  .recipe-title-row {
+    justify-content: center;
   }
 
-  .actions {
-    padding-bottom: 20px;
+  .meal-details {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .meal-tags {
+    justify-content: center;
+  }
+
+  .ingredients-section h3,
+  .instructions-section h3,
+  .video-section h3 {
+    text-align: center;
+  }
+}
+
+@media (max-width: 576px) {
+  .modal-content {
+    padding: 15px;
+    border-radius: 10px;
+  }
+
+  .close-button {
+    top: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    font-size: 20px;
+  }
+
+  .meal-image {
+    width: 180px;
+    height: 180px;
+  }
+
+  .meal-title h2 {
+    font-size: 22px;
+    margin-bottom: 15px;
+  }
+
+  .ingredients-section,
+  .instructions-section {
+    padding: 15px;
+  }
+
+  .action-btn {
+    padding: 12px 30px;
+    font-size: 14px;
+  }
+
+  .tag {
+    padding: 6px 12px;
+    font-size: 12px;
   }
 }
 </style>
