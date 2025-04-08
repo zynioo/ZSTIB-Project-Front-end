@@ -3,10 +3,10 @@
     <div class="rock-paper-scissors-header">
       <HeaderOfGame>
         <template #header>
-          <h2>Kamień Papier Nozyce</h2>
+          <h2>Kamień Papier Nożyce</h2>
         </template>
         <template #author>
-          <span>Michał Zajac</span>
+          <span>Michał Zając</span>
         </template>
         <template #description>
           <p>
