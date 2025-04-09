@@ -60,6 +60,10 @@ import SlotsPanel from "./SlotsPanel.vue";
 import { ref, watch } from "vue";
 import confetti from "canvas-confetti";
 
+interface SpinEvent extends MouseEvent {
+  onValid?: () => void;
+}
+
 const drawedNumbersAray = ref<number[][]>([
   [2, 2, 2],
   [2, 2, 2],
@@ -106,33 +110,31 @@ const randomizeNumbers = (delay = 10) => {
 /**
  * This function checks if user can play the game
  */
-const checkCanPlay = (event) => {
+const checkCanPlay = (event: SpinEvent) => {
   // Check if user is already broke
   if (wallet.value <= 0) {
     lost.value = true;
     return false;
   }
-  
+
   // Check if user has enough money for the bet
   if (wallet.value < stake.value) {
     alert("Nie masz wystarczających środków na koncie");
     return false;
   }
-  
+
   if (stake.value <= 0) {
     alert("Stawka musi być większa od 0");
     return false;
   }
-  
   // If we have a callback for valid spin (from lever animation)
   // call it now that we know the spin is valid
-  if (event && event.onValid && typeof event.onValid === 'function') {
+  if (event && event.onValid && typeof event.onValid === "function") {
     event.onValid();
   }
-  
+
   // Deduct money immediately when playing
   wallet.value -= stake.value;
-  
   changeNumbers();
   return true;
 };
@@ -150,7 +152,7 @@ const changeNumbers = () => {
  */
 const checkResults = () => {
   let winnings = 0;
-  
+
   //check super win
   if (
     drawedNumbersAray.value[1][0] == drawedNumbersAray.value[1][1] &&
@@ -172,15 +174,15 @@ const checkResults = () => {
     drawedNumbersAray.value[1][1] != drawedNumbersAray.value[1][2] &&
     drawedNumbersAray.value[1][0] != drawedNumbersAray.value[1][2]
   ) {
-    winnings = stake.value;
+    winnings = 2 * stake.value;
     isWin.value = true;
   }
-  
+
   // Add winnings to wallet if player won
   if (winnings > 0) {
     wallet.value += winnings;
   }
-  
+
   // Check if player lost all money
   if (wallet.value <= 0) {
     lost.value = true;
@@ -188,14 +190,18 @@ const checkResults = () => {
 };
 
 // Watch wallet changes to sync with localStorage
-watch(wallet, (newValue) => {
-  // Optional: Save wallet value to localStorage to persist between sessions
-  localStorage.setItem('slotsWallet', newValue.toString());
-}, { deep: true });
+watch(
+  wallet,
+  (newValue) => {
+    // Optional: Save wallet value to localStorage to persist between sessions
+    localStorage.setItem("slotsWallet", newValue.toString());
+  },
+  { deep: true }
+);
 
 // Initialize wallet from localStorage if available
 const initializeWallet = () => {
-  const savedWallet = localStorage.getItem('slotsWallet');
+  const savedWallet = localStorage.getItem("slotsWallet");
   if (savedWallet) {
     const parsedValue = parseInt(savedWallet);
     if (!isNaN(parsedValue) && parsedValue > 0) {
@@ -249,7 +255,7 @@ const launchConfetti = () => {
   margin-top: 1rem;
   color: white;
   text-align: center;
-  text-shadow: 0 0 10px rgba(255,255,255,0.3);
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
   transition: all 0.3s ease;
 }
 .prize-pool span {
@@ -268,16 +274,16 @@ const launchConfetti = () => {
   transition: 0.3s;
   cursor: pointer;
   text-transform: uppercase;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 .spin-button:hover {
   background-color: var(--primaryHover);
   transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
 }
 .spin-button:active {
   transform: translateY(0);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 .stake {
   width: 15%;
@@ -286,7 +292,7 @@ const launchConfetti = () => {
   border: 1px solid var(--primary);
   border-radius: 5px;
   margin-right: 1rem;
-  background-color: rgba(0,0,0,0.1);
+  background-color: rgba(0, 0, 0, 0.1);
   color: white;
   text-align: center;
   transition: all 0.3s ease;
