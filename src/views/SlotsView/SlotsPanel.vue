@@ -3,11 +3,11 @@
     <div class="slots-machine-top"></div>
     <div class="slots-display">
       <div class="slots-blocks" v-for="number in numbers" :key="number">
-        <div 
-          class="image-container" 
-          v-for="number2 in numbers" 
+        <div
+          class="image-container"
+          v-for="number2 in numbers"
           :key="number2"
-          :class="{ 'spinning': !props.spinEnded }"
+          :class="{ spinning: !props.spinEnded }"
         >
           <img
             class="slots-image"
@@ -22,13 +22,13 @@
       </div>
     </div>
     <div class="slots-machine-bottom"></div>
-    
+
     <!-- Completely Redesigned Slot Machine Lever -->
     <div class="lever-container">
       <div class="lever-track"></div>
-      <div 
-        class="lever" 
-        :class="{ 'lever-pulled': leverPulled }" 
+      <div
+        class="lever"
+        :class="{ 'lever-pulled': leverPulled }"
         @click="pullLever"
       >
         <div class="lever-grip"></div>
@@ -47,19 +47,18 @@ const props = defineProps<{
 }>();
 
 const leverPulled = ref(false);
-const emit = defineEmits(['spin']);
+const emit = defineEmits(["spin"]);
 
 const pullLever = () => {
   if (props.spinEnded) {
-    // Emit the spin event, but don't animate the lever yet
-    // The parent will decide if the spin is valid and call the animateLever method
-    emit('spin', {
+    // Only allow pulling the lever if we're not already spinning
+    emit("spin", {
       onValid: () => {
         leverPulled.value = true;
         setTimeout(() => {
           leverPulled.value = false;
         }, 1200);
-      }
+      },
     });
   }
 };
@@ -88,16 +87,19 @@ onUpdated(() => {
   }
 });
 
-watch(() => props.isWin, (newVal) => {
-  if (newVal && props.spinEnded) {
-    setTimeout(() => {
-      const winningSlots = document.querySelectorAll(".slots-block-win");
-      winningSlots.forEach(slot => {
-        slot.classList.add('win-pulse');
-      });
-    }, 300);
+watch(
+  () => props.isWin,
+  (newVal) => {
+    if (newVal && props.spinEnded) {
+      setTimeout(() => {
+        const winningSlots = document.querySelectorAll(".slots-block-win");
+        winningSlots.forEach((slot) => {
+          slot.classList.add("win-pulse");
+        });
+      }, 300);
+    }
   }
-});
+);
 </script>
 <style scoped>
 .slots-game-panel-container {
@@ -125,7 +127,7 @@ watch(() => props.isWin, (newVal) => {
 }
 
 .slots-machine-top::before {
-  content: '';
+  content: "";
   position: absolute;
   width: 90%;
   height: 8px;
@@ -149,8 +151,9 @@ watch(() => props.isWin, (newVal) => {
   background: rgba(0, 0, 0, 0.8);
   padding: 15px;
   border-radius: 5px;
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.1) inset, 
-              0 0 30px rgba(0, 0, 0, 0.5);
+  box-shadow:
+    0 0 20px rgba(255, 255, 255, 0.1) inset,
+    0 0 30px rgba(0, 0, 0, 0.5);
   width: 95%;
   transform-style: preserve-3d;
   transform: rotateX(5deg);
@@ -184,21 +187,27 @@ watch(() => props.isWin, (newVal) => {
   border: 3px solid #444;
   border-radius: 8px;
   background: linear-gradient(145deg, #222, #111);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5), 
-              0 0 20px rgba(0, 0, 0, 0.3) inset;
+  box-shadow:
+    0 0 10px rgba(0, 0, 0, 0.5),
+    0 0 20px rgba(0, 0, 0, 0.3) inset;
   position: relative;
   overflow: hidden;
   transition: all 0.3s ease;
 }
 
 .image-container::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
   z-index: 5;
 }
 
@@ -218,19 +227,19 @@ watch(() => props.isWin, (newVal) => {
 }
 
 .spinning::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   background: linear-gradient(
-    90deg, 
-    rgba(255,255,255,0.1) 0%, 
-    rgba(255,255,255,0.2) 25%, 
-    rgba(255,255,255,0.1) 50%,
-    rgba(255,255,255,0) 51%,
-    rgba(255,255,255,0) 100%
+    90deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.2) 25%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0) 51%,
+    rgba(255, 255, 255, 0) 100%
   );
   animation: horizontalSpin 0.5s linear infinite;
   pointer-events: none;
@@ -241,14 +250,24 @@ watch(() => props.isWin, (newVal) => {
 }
 
 @keyframes horizontalSpin {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
 }
 
 @keyframes horizontalShake {
-  0% { transform: translateX(-2px); }
-  50% { transform: translateX(2px); }
-  100% { transform: translateX(-2px); }
+  0% {
+    transform: translateX(-2px);
+  }
+  50% {
+    transform: translateX(2px);
+  }
+  100% {
+    transform: translateX(-2px);
+  }
 }
 
 .slots-block-lose {
@@ -267,27 +286,41 @@ watch(() => props.isWin, (newVal) => {
 }
 
 @keyframes winPulse {
-  0% { 
+  0% {
     transform: scale(1);
     box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
   }
-  50% { 
+  50% {
     transform: scale(1.05);
-    box-shadow: 0 0 25px rgba(255, 215, 0, 0.9), 0 0 40px rgba(255, 215, 0, 0.4);
+    box-shadow:
+      0 0 25px rgba(255, 215, 0, 0.9),
+      0 0 40px rgba(255, 215, 0, 0.4);
   }
-  100% { 
+  100% {
     transform: scale(1);
     box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
   }
 }
 
 @keyframes losePulse {
-  0% { transform: translateX(0); }
-  20% { transform: translateX(-4px); }
-  40% { transform: translateX(4px); }
-  60% { transform: translateX(-4px); }
-  80% { transform: translateX(4px); }
-  100% { transform: translateX(0); }
+  0% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-4px);
+  }
+  40% {
+    transform: translateX(4px);
+  }
+  60% {
+    transform: translateX(-4px);
+  }
+  80% {
+    transform: translateX(4px);
+  }
+  100% {
+    transform: translateX(0);
+  }
 }
 
 @media (max-width: 967px) {
@@ -324,7 +357,8 @@ watch(() => props.isWin, (newVal) => {
   .slots-blocks {
     height: 80px;
   }
-  .slots-machine-top, .slots-machine-bottom {
+  .slots-machine-top,
+  .slots-machine-bottom {
     width: 98%;
   }
   .slots-display {
@@ -350,13 +384,13 @@ watch(() => props.isWin, (newVal) => {
   border-radius: 10px;
   left: 50%;
   transform: translateX(-50%);
-  box-shadow: inset 0 0 10px rgba(0,0,0,0.7);
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.7);
   border: 2px solid #333;
 }
 
 .lever {
   position: absolute;
-  top: -30px;
+  top: -45px;
   left: 0;
   width: 100%;
   height: 80px;
@@ -373,7 +407,7 @@ watch(() => props.isWin, (newVal) => {
   left: 50%;
   transform: translateX(-50%);
   top: 50%;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   z-index: 1;
 }
 
@@ -388,20 +422,24 @@ watch(() => props.isWin, (newVal) => {
   left: 50%;
   transform: translateX(-50%);
   z-index: 2;
-  box-shadow: 
-    0 4px 8px rgba(0,0,0,0.5),
-    0 0 15px rgba(255,0,0,0.2),
-    inset 0 0 10px rgba(255,100,100,0.5);
+  box-shadow:
+    0 4px 8px rgba(0, 0, 0, 0.5),
+    0 0 15px rgba(255, 0, 0, 0.2),
+    inset 0 0 10px rgba(255, 100, 100, 0.5);
 }
 
 .lever-grip::before {
-  content: '';
+  content: "";
   position: absolute;
   width: 60%;
   height: 60%;
   top: 20%;
   left: 20%;
-  background: linear-gradient(135deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 50%);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(255, 255, 255, 0) 50%
+  );
   border-radius: 50%;
   z-index: 3;
 }
@@ -416,10 +454,10 @@ watch(() => props.isWin, (newVal) => {
 }
 
 .lever:hover .lever-grip {
-  box-shadow: 
-    0 4px 8px rgba(0,0,0,0.5),
-    0 0 20px rgba(255,0,0,0.4),
-    inset 0 0 10px rgba(255,100,100,0.5);
+  box-shadow:
+    0 4px 8px rgba(0, 0, 0, 0.5),
+    0 0 20px rgba(255, 0, 0, 0.4),
+    inset 0 0 10px rgba(255, 100, 100, 0.5);
 }
 
 @media (max-width: 1100px) {
@@ -435,11 +473,11 @@ watch(() => props.isWin, (newVal) => {
     right: -50px;
     height: 200px;
   }
-  
+
   .lever {
     height: 60px;
   }
-  
+
   .lever-grip {
     width: 40px;
     height: 40px;
@@ -453,19 +491,19 @@ watch(() => props.isWin, (newVal) => {
     height: 150px;
     width: 40px;
   }
-  
+
   .lever-track {
     width: 15px;
   }
-  
+
   .lever {
     height: 50px;
   }
-  
+
   .lever-rod {
     width: 10px;
   }
-  
+
   .lever-grip {
     width: 35px;
     height: 35px;
@@ -481,11 +519,11 @@ watch(() => props.isWin, (newVal) => {
     height: 120px;
     width: 30px;
   }
-  
+
   .lever-rod {
     height: 70%;
   }
-  
+
   .lever-grip {
     width: 25px;
     height: 25px;

@@ -39,8 +39,15 @@
           class="stake"
           v-model="stake"
           placeholder="Wpisz stawkę zakładu"
+          :disabled="isSpinning"
         />
-        <button class="spin-button" @click="checkCanPlay">Zakręć</button>
+        <button
+          class="spin-button"
+          @click="checkCanPlay"
+          :disabled="isSpinning"
+        >
+          {{ isSpinning ? "Kręcę..." : "Zakręć" }}
+        </button>
         <div class="lost" v-if="lost">
           Przegrałeś wszystkie pieniądze
           <a
@@ -174,7 +181,7 @@ const checkResults = () => {
     drawedNumbersAray.value[1][1] != drawedNumbersAray.value[1][2] &&
     drawedNumbersAray.value[1][0] != drawedNumbersAray.value[1][2]
   ) {
-    winnings = 2 * stake.value;
+    winnings = stake.value * 2;
     isWin.value = true;
   }
 
@@ -285,6 +292,13 @@ const launchConfetti = () => {
   transform: translateY(0);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
+.spin-button:disabled {
+  background-color: #555;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+  opacity: 0.7;
+}
 .stake {
   width: 15%;
   padding: 0.5rem;
@@ -301,6 +315,10 @@ const launchConfetti = () => {
   outline: none;
   box-shadow: 0 0 10px var(--primary);
   border-color: var(--primary);
+}
+.stake:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 .joker-drawed {
   width: 100%;
