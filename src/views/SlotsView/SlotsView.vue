@@ -153,8 +153,8 @@ const checkResults = () => {
   
   //check super win
   if (
-    drawedNumbersAray.value[0][0] == drawedNumbersAray.value[0][1] &&
-    drawedNumbersAray.value[0][1] == drawedNumbersAray.value[0][2] &&
+    drawedNumbersAray.value[1][0] == drawedNumbersAray.value[1][1] &&
+    drawedNumbersAray.value[1][1] == drawedNumbersAray.value[1][2] &&
     drawedNumbersAray.value[1][0] == 2
   ) {
     winnings = stake.value * 5;
