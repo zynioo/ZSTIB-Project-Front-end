@@ -74,7 +74,7 @@ const works: Work[] = [
   },
   {
     title: "Recipes",
-    imgSrc: "SudokuPreview.png",
+    imgSrc: "recipesPreview.png",
     href: "/recipes",
   },
 ];
