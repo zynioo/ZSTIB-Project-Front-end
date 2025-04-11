@@ -77,6 +77,11 @@ const works: Work[] = [
     imgSrc: "recipesPreview.png",
     href: "/recipes",
   },
+  {
+    title: "Memory",
+    imgSrc: "pytajnik.png",
+    href: "/memory",
+  },
 ];
 </script>
 

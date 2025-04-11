@@ -11,6 +11,7 @@ import ExchangeRatesView from "@/views/ExchangeRatesView/ExchangeRatesView.vue";
 import WeatherAppView from "@/views/WeatherAppView/WeatherAppView.vue";
 import SudokuView from "@/views/SudokuView/SudokuView.vue";
 import RecipesView from "@/views/RecipesView/RecipesView.vue";
+import MemoryView from "@/views/MemoryView/MemoryView.vue";
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
@@ -71,6 +72,11 @@ const routes: Array<RouteRecordRaw> = [
     path: "/recipes",
     name: "Recipes",
     component: RecipesView,
+  },
+  {
+    path: "/memory",
+    name: "Memory",
+    component: MemoryView,
   },
 ];
 
