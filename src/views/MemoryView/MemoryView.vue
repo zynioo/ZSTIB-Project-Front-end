@@ -9,7 +9,7 @@
           <h2>Memory</h2>
         </template>
         <template #description>
-          <p>Oto gra memory kliknij na karte aby ja odkryc i dopasować pare</p>
+          <p>Oto gra memory kliknij na kartę aby ją odkryć i dopasować parę</p>
         </template>
       </HeaderOfGame>
     </div>
