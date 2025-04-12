@@ -9,13 +9,16 @@
           <h2>Memory</h2>
         </template>
         <template #description>
-          <p>Oto gra memory</p>
+          <p>Oto gra memory kliknij na karte aby ja odkryc i dopasować pare</p>
         </template>
       </HeaderOfGame>
     </div>
     <div class="row main-row">
       <div class="col-12">
-        <MemoryPanel :indexOfColors="indexOfColors"></MemoryPanel>
+        <MemoryPanel
+          @gameFinished="generateRandomIndexes"
+          :indexOfColors="indexOfColors"
+        ></MemoryPanel>
       </div>
     </div>
   </div>
@@ -26,13 +29,19 @@ import MemoryPanel from "./MemoryPanel.vue";
 import { onMounted, ref } from "vue";
 const indexOfColors = ref<number[]>([]);
 
-onMounted(() => {
-  while (indexOfColors.value.length < 12) {
-    const randomNumber = Math.floor(Math.random() * 12);
+const generateRandomIndexes = () => {
+  indexOfColors.value = [];
+  // Generate 16 unique random numbers between 0 and 15
+  while (indexOfColors.value.length < 16) {
+    const randomNumber = Math.floor(Math.random() * 16);
     if (!indexOfColors.value.includes(randomNumber)) {
       indexOfColors.value.push(randomNumber);
     }
   }
+};
+
+onMounted(() => {
+  generateRandomIndexes();
 });
 </script>
 <style scoped>
