@@ -79,7 +79,7 @@ const works: Work[] = [
   },
   {
     title: "Memory",
-    imgSrc: "pytajnik.png",
+    imgSrc: "MemoryPreview.png",
     href: "/memory",
   },
 ];
