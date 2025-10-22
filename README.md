@@ -26,19 +26,23 @@ npm install
 After installing dependencies, start the development server:
 
 ** # 3) Start the dev server with hot-reload **
+```bash
 npm run dev  
-
+```
 
 Then open your browser and go to http://localhost:5173 (or the address shown in the console) to view the website.
 
 To build the project for production:
-
+```bash
 npm run build  
-
+```
 
 To preview the production build locally:
 
-npm run preview  
+```bash
+npm run preview
+```
+
 ## 🧬 Technologies Used
 
 Vue 3 — modern reactive front-end framework
