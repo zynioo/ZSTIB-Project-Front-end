@@ -24,9 +24,8 @@ npm install
 ## ▶️ How to Run
 
 After installing dependencies, start the development server:
-
-** # 3) Start the dev server with hot-reload **
 ```bash
+# 3) Start the dev server with hot-reload 
 npm run dev  
 ```
 
